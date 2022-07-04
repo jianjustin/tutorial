@@ -13,8 +13,7 @@
 
 # Dependency directories (remove the comment below to include it)
 # vendor/
-<<<<<<< HEAD
-
 .idea/
-=======
->>>>>>> 28ef764ff9a97e4fd61c1018ea0aeab85775d014
+Go.Guide.iml
+modules.xml
+vcs.xml
