@@ -1,22 +1,4 @@
-package main
-
-import "fmt"
-
-func main() {
-	res := plus(1, 2)
-	fmt.Println("1+2=", res)
-
-	a, b := vals()
-	fmt.Printf("a = %d, b = %d\n", a, b)
-
-	total := sum(1, 2, 3, 4, 5)
-	fmt.Printf("total = %d\n", total)
-
-	nextInt := intSeq()
-	fmt.Println(nextInt())
-	fmt.Println(nextInt())
-	fmt.Println(nextInt())
-}
+package example
 
 func plus(a int, b int) int {
 	return a + b

@@ -1,6 +1,4 @@
-package main
-
-import "fmt"
+package example
 
 type person struct {
 	name string
@@ -13,8 +11,9 @@ func newPerson(name string) *person {
 	return &p
 }
 
+/*
 func main() {
 	fmt.Println(person{name: "Alice", age: 30})
 	s := person{name: "Sean", age: 50}
 	fmt.Println(s.name)
-}
+}*/

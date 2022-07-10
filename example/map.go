@@ -1,7 +1,6 @@
-package main
+package example
 
-import "fmt"
-
+/*
 func main(){
 	//创建字典
 	m := make(map[string]int)
@@ -20,4 +19,4 @@ func main(){
 	_, prs := m["k2"]
 	fmt.Println("prs: ", prs)
 
-}
+}*/
