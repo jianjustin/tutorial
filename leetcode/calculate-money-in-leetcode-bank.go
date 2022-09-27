@@ -1,4 +1,4 @@
-package main
+package leetcode
 
 import "fmt"
 
@@ -13,7 +13,7 @@ func main() {
 
 }
 
-//计算最终存的钱
+// 计算最终存的钱
 func calculate_money(n int) int {
 	var result = 0
 
