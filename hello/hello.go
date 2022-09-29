@@ -1,10 +1,12 @@
+//go:build ignore
+// +build ignore
+
 package main
 
 import (
 	"fmt"
-	"testing"
 )
 
-func TestHello(t *testing.T) {
+func main() {
 	fmt.Println("hello world")
 }

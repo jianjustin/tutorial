@@ -1,12 +1,14 @@
+//go:build ignore
+// +build ignore
+
 package main
 
 import (
 	"fmt"
-	"testing"
 
 	"rsc.io/quote"
 )
 
-func TestQuoteGo(t *testing.T) {
+func main() {
 	fmt.Println(quote.Go())
 }
