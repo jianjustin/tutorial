@@ -3,3 +3,4 @@ go 1.19
 use ./leetcode
 use ./hello
 use ./web-service-gin
+use ./example
