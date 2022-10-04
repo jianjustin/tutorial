@@ -5,8 +5,10 @@ package main
 
 import (
 	"fmt"
+
+	"go.guide/tools"
 )
 
 func main() {
-	fmt.Println("hello world")
+	fmt.Println(tools.ToUpper("Hello"))
 }
