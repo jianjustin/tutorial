@@ -13,7 +13,11 @@ func main() {
 		log.Fatal(err)
 	}
 	defer conn.Close()
-	mustCopy(os.Stdout, conn)
+	//mustCopy(os.Stdout, conn)
+
+	//netcat to reverb
+	go mustCopy(os.Stdout, conn)
+	mustCopy(conn, os.Stdin)
 }
 
 func mustCopy(dst io.Writer, src io.Reader) {
