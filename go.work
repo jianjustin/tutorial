@@ -1,9 +1,6 @@
 go 1.19
 
 use (
-	./example
-	./tools
-	./leetcode
-	./hello
 	./web-service-gin
+	./tutorial
 )
