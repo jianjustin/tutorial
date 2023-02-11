@@ -3,4 +3,5 @@ go 1.19
 use (
 	./tutorial
 	./go-micro
+	./gateway-app
 )
