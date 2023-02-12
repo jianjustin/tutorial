@@ -5,4 +5,5 @@ use (
 	./go-micro
 	./gateway-app
 	./grpc-app
+	grpc-route-app
 )

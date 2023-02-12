@@ -1,4 +1,4 @@
-module go.guide/grpc-app
+module go.guide/grpc-route-app
 
 go 1.20
 
