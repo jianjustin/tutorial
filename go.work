@@ -4,4 +4,5 @@ use (
 	./tutorial
 	./go-micro
 	./gateway-app
+	./grpc-app
 )
