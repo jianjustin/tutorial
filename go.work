@@ -6,4 +6,5 @@ use (
 	./gateway-app
 	./grpc-app
 	grpc-route-app
+	grpc-balancer-app
 )
