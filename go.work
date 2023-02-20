@@ -1,10 +1,12 @@
 go 1.19
 
 use (
-	./tutorial
-	./go-micro
-	./gateway-app
-	./grpc-app
+	tutorial
+	go-micro
+	gateway-app
+	grpc-app
 	grpc-route-app
 	grpc-balancer-app
+	product-app
+	order-service-app
 )
