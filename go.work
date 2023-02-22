@@ -4,9 +4,9 @@ use (
 	tutorial
 	go-micro
 	gateway-app
-	grpc-app
 	grpc-route-app
 	grpc-balancer-app
 	product-app
 	order-service-app
+	grpc
 )
