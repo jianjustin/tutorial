@@ -3,8 +3,5 @@ go 1.19
 use (
 	tutorial
 	go-micro
-	grpc-route-app
-	grpc-balancer-app
-	order-service-app
 	grpc
 )
