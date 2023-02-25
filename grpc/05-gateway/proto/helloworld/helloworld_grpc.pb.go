@@ -22,6 +22,7 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type GreeterClient interface {
+	// Sends a greeting
 	SayHello(ctx context.Context, in *HelloRequest, opts ...grpc.CallOption) (*HelloReply, error)
 }
 
@@ -43,21 +44,20 @@ func (c *greeterClient) SayHello(ctx context.Context, in *HelloRequest, opts ...
 }
 
 // GreeterServer is the server API for Greeter service.
-// All implementations must embed UnimplementedGreeterServer
+// All implementations should embed UnimplementedGreeterServer
 // for forward compatibility
 type GreeterServer interface {
+	// Sends a greeting
 	SayHello(context.Context, *HelloRequest) (*HelloReply, error)
-	mustEmbedUnimplementedGreeterServer()
 }
 
-// UnimplementedGreeterServer must be embedded to have forward compatible implementations.
+// UnimplementedGreeterServer should be embedded to have forward compatible implementations.
 type UnimplementedGreeterServer struct {
 }
 
 func (UnimplementedGreeterServer) SayHello(context.Context, *HelloRequest) (*HelloReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SayHello not implemented")
 }
-func (UnimplementedGreeterServer) mustEmbedUnimplementedGreeterServer() {}
 
 // UnsafeGreeterServer may be embedded to opt out of forward compatibility for this service.
 // Use of this interface is not recommended, as added methods to GreeterServer will
