@@ -24,29 +24,6 @@ var (
 	name = flag.String("name", defaultName, "Name to greet")
 )
 
-func testService(service string) {
-	conn, err := grpc.Dial(fmt.Sprintf("%s:///%s", etcd_pkg.Scheme, service), grpc.WithBlock(), grpc.WithDefaultServiceConfig(`{"loadBalancingPolicy":"round_robin"}`), grpc.WithInsecure())
-	if err != nil {
-		log.Fatalf("did not connect: %v", err)
-	}
-	defer conn.Close()
-	c := pb.NewGreeterClient(conn)
-
-	i := 1
-
-	for {
-		fmt.Println("开始验证")
-		r, err := c.SayHello(context.Background(), &helloworld.HelloRequest{Name: *name})
-		if err != nil {
-			fmt.Println(err)
-		} else {
-			fmt.Println(r.Message)
-		}
-		i++
-		time.Sleep(time.Second)
-	}
-}
-
 func main() {
 	flag.Parse()
 	client, err := clientv3.New(clientv3.Config{Endpoints: []string{"0.0.0.0:2379"}, DialTimeout: time.Second * 5})
