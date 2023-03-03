@@ -3,16 +3,16 @@ package main
 import (
 	"context"
 	"flag"
-	"fmt"
-	"go.guide/grpc/01-helloworld/proto"
+	clientv3 "go.etcd.io/etcd/client/v3"
+	etcd_pkg "go.guide/grpc/08-etcd/pkg"
+	"go.guide/grpc/08-etcd/proto"
 	"google.golang.org/grpc"
 	"log"
 	"net"
+	"time"
 )
 
-var (
-	port = flag.Int("port", 50051, "The server port")
-)
+var ()
 
 // server is used to implement helloworld.GreeterServer.
 type server struct {
@@ -26,8 +26,25 @@ func (s *server) SayHello(ctx context.Context, in *helloworld.HelloRequest) (*he
 }
 
 func main() {
-	flag.Parse()
-	lis, err := net.Listen("tcp", fmt.Sprintf(":%d", *port))
+	port := flag.String("port", ":50051", "The server port")
+	service := flag.String("service", "hello-world-service", "service name")
+
+	client, err := clientv3.New(clientv3.Config{Endpoints: []string{"0.0.0.0:2379"}, DialTimeout: time.Second * 5})
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+
+	go func() {
+		err := etcd_pkg.Register(ctx, client, *service, "localhost"+*port)
+		if err != nil {
+			log.Fatal(err)
+		}
+	}()
+
+	lis, err := net.Listen("tcp", *port)
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
 	}
