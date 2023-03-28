@@ -29,8 +29,12 @@ func TestMerge(t *testing.T) {
 	c1 := Sq(in)
 	c2 := Sq(in)
 
+	done := make(chan struct{}, 2)
+
 	// Consume the merged output from c1 and c2.
-	for n := range Merge(c1, c2) {
+	for n := range Merge(done, c1, c2) {
 		fmt.Println(n) // 4 then 9, or 9 then 4
 	}
+	done <- struct{}{}
+	done <- struct{}{}
 }
