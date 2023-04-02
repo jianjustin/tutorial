@@ -3,7 +3,7 @@ package main
 import (
 	"context"
 	"flag"
-	"go.guide/gateway-app/proto/helloworld"
+	"go.guide/grpc/05-gateway/proto/helloworld"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 	"log"

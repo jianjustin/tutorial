@@ -4,7 +4,7 @@ import (
 	"context"
 	"flag"
 	"fmt"
-	"go.guide/gateway-app/proto/helloworld"
+	"go.guide/grpc/02-interceptor/proto"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 	"log"
