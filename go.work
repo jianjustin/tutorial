@@ -5,4 +5,6 @@ use (
 	go-micro
 	grpc
 	patterns
+	microservices-app-01
+	microservices-app-02
 )

@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+option go_package = "./;proto";
+
+package proto;
+
+// The greeting service definition.
+service B {
+  // Sends a greeting
+  rpc AddBPreffix (BRequest) returns (BReply) {}
+}
+
+// The request message containing the user's name.
+message BRequest {
+  string name = 1;
+}
+
+// The response message containing the greetings
+message BReply {
+  string res = 1;
+}
