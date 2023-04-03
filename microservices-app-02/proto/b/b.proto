@@ -3,19 +3,25 @@ syntax = "proto3";
 option go_package = "./;proto";
 
 package proto;
+import "google/api/annotations.proto";
 
 // The greeting service definition.
-service A {
+service B {
   // Sends a greeting
-  rpc AddAPreffix (ARequest) returns (AReply) {}
+  rpc AddBPreffix (BRequest) returns (BReply) {
+    option (google.api.http) = {
+      post: "/v1/b/addBPreffix"
+      body: "*"
+    };
+  }
 }
 
 // The request message containing the user's name.
-message ARequest {
+message BRequest {
   string name = 1;
 }
 
 // The response message containing the greetings
-message AReply {
+message BReply {
   string res = 1;
 }

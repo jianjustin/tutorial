@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.3.0
 // - protoc             v3.12.4
-// source: proto/b.proto
+// source: b/b.proto
 
 package proto
 
@@ -48,22 +48,20 @@ func (c *bClient) AddBPreffix(ctx context.Context, in *BRequest, opts ...grpc.Ca
 }
 
 // BServer is the server API for B service.
-// All implementations must embed UnimplementedBServer
+// All implementations should embed UnimplementedBServer
 // for forward compatibility
 type BServer interface {
 	// Sends a greeting
 	AddBPreffix(context.Context, *BRequest) (*BReply, error)
-	mustEmbedUnimplementedBServer()
 }
 
-// UnimplementedBServer must be embedded to have forward compatible implementations.
+// UnimplementedBServer should be embedded to have forward compatible implementations.
 type UnimplementedBServer struct {
 }
 
 func (UnimplementedBServer) AddBPreffix(context.Context, *BRequest) (*BReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AddBPreffix not implemented")
 }
-func (UnimplementedBServer) mustEmbedUnimplementedBServer() {}
 
 // UnsafeBServer may be embedded to opt out of forward compatibility for this service.
 // Use of this interface is not recommended, as added methods to BServer will
@@ -107,5 +105,5 @@ var B_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "proto/b.proto",
+	Metadata: "b/b.proto",
 }

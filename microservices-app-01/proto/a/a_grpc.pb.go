@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.3.0
 // - protoc             v3.12.4
-// source: proto/a.proto
+// source: a/a.proto
 
 package proto
 
@@ -48,22 +48,20 @@ func (c *aClient) AddAPreffix(ctx context.Context, in *ARequest, opts ...grpc.Ca
 }
 
 // AServer is the server API for A service.
-// All implementations must embed UnimplementedAServer
+// All implementations should embed UnimplementedAServer
 // for forward compatibility
 type AServer interface {
 	// Sends a greeting
 	AddAPreffix(context.Context, *ARequest) (*AReply, error)
-	mustEmbedUnimplementedAServer()
 }
 
-// UnimplementedAServer must be embedded to have forward compatible implementations.
+// UnimplementedAServer should be embedded to have forward compatible implementations.
 type UnimplementedAServer struct {
 }
 
 func (UnimplementedAServer) AddAPreffix(context.Context, *ARequest) (*AReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AddAPreffix not implemented")
 }
-func (UnimplementedAServer) mustEmbedUnimplementedAServer() {}
 
 // UnsafeAServer may be embedded to opt out of forward compatibility for this service.
 // Use of this interface is not recommended, as added methods to AServer will
@@ -107,5 +105,5 @@ var A_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "proto/a.proto",
+	Metadata: "a/a.proto",
 }
