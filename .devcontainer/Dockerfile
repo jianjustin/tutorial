@@ -8,6 +8,14 @@ RUN go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
 RUN go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
 RUN go install -v golang.org/x/tools/gopls@latest
 RUN go install github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-grpc-gateway@latest
+#RUN go install github.com/go-delve/delve/cmd/dlv@latest
+#RUN go install honnef.co/go/tools/cmd/staticcheck@latest
+
+# 安装kubectl
+# RUN curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl && \
+#     chmod +x ./kubectl && \
+#     mv ./kubectl /usr/local/bin/kubectl
+
 
 # [Optional] Uncomment this section to install additional OS packages.
 # RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
