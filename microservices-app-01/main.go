@@ -8,8 +8,9 @@ import (
 	"net"
 	"net/http"
 
+	a "microservices-app-01/proto/a"
+
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
-	a "go.guide/microservices-app-01/proto/a"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 )

@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: microservices-app-a
-        image: microservices-app-a:latest
+        image: jianjustin/microservices-app-a@latest
         ports:
         - containerPort: 50051 # gRPC Port
         - containerPort: 8080 # HTTP Port
