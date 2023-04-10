@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: microservices-app-b
-        image: microservices-app-b:latest
+        image: microservices-app-b:1.0.0
         ports:
         - containerPort: 50051 # gRPC Port
         - containerPort: 8080 # HTTP Port

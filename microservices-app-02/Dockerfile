@@ -1,21 +1,29 @@
-FROM golang:1.20 AS builder
+FROM golang:1.20-alpine AS builder
 
-WORKDIR /app
+# Set destination for COPY
+ENV GOROOT /usr/local/go
+ADD . /go/src/microservices-app-02
+WORKDIR /go/src/microservices-app-02
+#WORKDIR /app
 
-# Copy the source code into the container
-COPY . .
-
-# Install dependencies
+# Download Go modules
+COPY go.mod go.sum ./
 RUN go mod download
 
-# Build the binary
-RUN go build -o /app/server ./cmd/server
+# Copy the source code. Note the slash at the end, as explained in
+# https://docs.docker.com/engine/reference/builder/#copy
+COPY *.go ./
 
-FROM alpine:3.14
+# Build
+RUN GOOS=linux go build -o /server
 
-# Copy the binary into the container
-COPY --from=builder /app/server /usr/local/bin/server
+# Optional:
+# To bind to a TCP port, runtime parameters must be supplied to the docker command.
+# But we can document in the Dockerfile what ports
+# the application is going to listen on by default.
+# https://docs.docker.com/engine/reference/builder/#expose
+EXPOSE 50051
+EXPOSE 8080
 
-# Set the binary as the entrypoint
-ENTRYPOINT ["/usr/local/bin/server"]
-# docker build -t microservices-app-b:1.0.0 --build-arg GO_VERSION=1.20 .
+# Run
+CMD ["/server"]
