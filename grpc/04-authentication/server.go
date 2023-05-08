@@ -4,11 +4,12 @@ import (
 	"context"
 	"flag"
 	"fmt"
-	pb "go.guide/grpc/03-streaming/proto"
-	"go.guide/grpc/04-authentication/tools"
 	"log"
 	"net"
 	"strings"
+
+	pb "go.guide/grpc/03-streaming/proto"
+	"go.guide/grpc/04-authentication/tools"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"

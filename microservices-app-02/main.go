@@ -8,8 +8,9 @@ import (
 	"net"
 	"net/http"
 
+	b "microservices-app-02/proto/b"
+
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
-	b "go.guide/microservices-app-02/proto/b"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 )
@@ -69,6 +70,6 @@ func main() {
 		Handler: gwmux,
 	}
 
-	log.Println(fmt.Sprintf("Serving gRPC-Gateway on http://0.0.0.0::%d", *restful))
+	log.Printf("Serving gRPC-Gateway on http://0.0.0.0::%d\n", *restful)
 	log.Fatalln(gwServer.ListenAndServe())
 }

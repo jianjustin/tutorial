@@ -3,8 +3,10 @@ package main
 import (
 	"context"
 	"fmt"
-	"go-micro.dev/v4"
+
 	proto "go.guide/go-micro/helloworld/proto"
+
+	"go-micro.dev/v4"
 )
 
 // Greeter 定义结构体 作为方法调用方

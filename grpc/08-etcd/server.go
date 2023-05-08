@@ -3,14 +3,15 @@ package main
 import (
 	"context"
 	"fmt"
-	clientv3 "go.etcd.io/etcd/client/v3"
-	etcd_pkg "go.guide/grpc/08-etcd/pkg"
-	"go.guide/grpc/08-etcd/proto"
-	"google.golang.org/grpc"
 	"log"
 	"net"
 	"sync"
 	"time"
+
+	clientv3 "go.etcd.io/etcd/client/v3"
+	etcd_pkg "go.guide/grpc/08-etcd/pkg"
+	helloworld "go.guide/grpc/08-etcd/proto"
+	"google.golang.org/grpc"
 )
 
 var (

@@ -3,12 +3,13 @@ package main
 import (
 	"context"
 	"fmt"
-	pb "go.guide/grpc/03-streaming/proto"
-	"google.golang.org/grpc"
 	"io"
 	"log"
 	"net"
 	"sync"
+
+	pb "go.guide/grpc/03-streaming/proto"
+	"google.golang.org/grpc"
 )
 
 const (

@@ -1,7 +1,6 @@
-package main
+package flags
 
 import (
-	"flag"
 	"fmt"
 	"strconv"
 )
@@ -28,8 +27,6 @@ func (f *Celsius) String() string {
 }
 
 func (f *celsiusFlag) Set(s string) error {
-	return nil
-
 	var unit string
 	var value float64
 	fmt.Sscanf(s, "%f%s", &value, &unit) // no error check needed
@@ -42,11 +39,4 @@ func (f *celsiusFlag) Set(s string) error {
 		return nil
 	}
 	return fmt.Errorf("invalid temperature %q", s)
-}
-
-func main() {
-	f := celsiusFlag{Celsius: 20}
-	flag.Var(&f, "temp", "the temperature")
-	flag.Parse()
-	fmt.Println(f.String())
 }

@@ -4,11 +4,12 @@ import (
 	"context"
 	"flag"
 	"fmt"
-	helloworldpb "go.guide/grpc/06-nameResolving/proto/helloworld"
-	"google.golang.org/grpc"
 	"log"
 	"net"
 	"sync"
+
+	helloworldpb "go.guide/grpc/06-nameResolving/proto/helloworld"
+	"google.golang.org/grpc"
 )
 
 var (

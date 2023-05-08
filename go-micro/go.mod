@@ -1,4 +1,4 @@
-module go-micro
+module go.guide/go-micro
 
 go 1.20
 
