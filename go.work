@@ -1,10 +1,8 @@
 go 1.20
 
 use (
-	./go-micro
 	./grpc
 	./microservices-app-01
 	./microservices-app-02
-	./raftexample
 	./tutorial
 )
