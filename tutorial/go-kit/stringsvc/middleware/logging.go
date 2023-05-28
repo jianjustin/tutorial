@@ -1,4 +1,4 @@
-package logging
+package middleware
 
 import (
 	"github.com/go-kit/log"

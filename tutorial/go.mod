@@ -7,4 +7,7 @@ require (
 	github.com/go-kit/log v0.2.1
 )
 
-require github.com/go-logfmt/logfmt v0.6.0 // indirect
+require (
+	github.com/go-logfmt/logfmt v0.6.0 // indirect
+	github.com/prometheus/client_golang v1.15.1 // indirect
+)
