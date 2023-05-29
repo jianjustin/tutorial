@@ -19,4 +19,7 @@ func TestVisitor(t *testing.T) {
 	person.Accept(visitor)
 	animal.Accept(visitor)
 
+	visitor = &visitor2.VisitorC{}
+	person.Accept(visitor)
+	animal.Accept(visitor)
 }

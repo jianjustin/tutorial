@@ -50,3 +50,11 @@ func (v *VisitorB) VisitPerson(p *Person) {
 func (v *VisitorB) VisitAnimal(a *Animal) {
 	fmt.Printf("Animal %s B visited\n", a.Name)
 }
+
+type VisitorC struct {
+	VisitorB
+}
+
+func (v *VisitorC) VisitAnimal(a *Animal) {
+	fmt.Printf("Animal %s C visited\n", a.Name)
+}
