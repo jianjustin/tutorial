@@ -5,4 +5,5 @@ use (
 	./microservices-app-01
 	./microservices-app-02
 	./tutorial
+	./patterns
 )
