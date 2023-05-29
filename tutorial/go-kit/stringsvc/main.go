@@ -1,6 +1,8 @@
 package main
 
 import (
+	"context"
+	"flag"
 	kitprometheus "github.com/go-kit/kit/metrics/prometheus"
 	httptransport "github.com/go-kit/kit/transport/http"
 	"github.com/go-kit/log"
@@ -13,7 +15,13 @@ import (
 	"os"
 )
 
+var (
+	listen = flag.String("listen", ":8080", "HTTP listen address")
+	proxy  = flag.String("proxy", "", "Optional comma-separated list of URLs to proxy uppercase requests")
+)
+
 func main() {
+	flag.Parse()
 	//svc := service.StringServiceImpl{}
 	logger := log.NewLogfmtLogger(os.Stderr)
 
@@ -39,6 +47,7 @@ func main() {
 
 	var svc service.StringService
 	svc = service.StringServiceImpl{}
+	svc = middleware.ProxyingMiddleware(context.Background(), *proxy, logger)(svc)
 	svc = middleware.LoggingMiddleware{Logger: logger, Next: svc}
 	svc = middleware.InstrumentingMiddleware{RequestCount: requestCount, RequestLatency: requestLatency, CountResult: countResult, Next: svc}
 
@@ -57,6 +66,6 @@ func main() {
 	http.Handle("/uppercase", uppercaseHandler)
 	http.Handle("/count", countHandler)
 	http.Handle("/metrics", promhttp.Handler())
-	logger.Log("msg", "HTTP", "addr", ":8080")
-	logger.Log("err", http.ListenAndServe(":8080", nil))
+	logger.Log("msg", "HTTP", "addr", *listen)
+	logger.Log("err", http.ListenAndServe(*listen, nil))
 }

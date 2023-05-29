@@ -10,6 +10,9 @@ type StringService interface {
 	Count(string) int
 }
 
+// ServiceMiddleware is a chainable behavior modifier for StringService.
+type ServiceMiddleware func(StringService) StringService
+
 type StringServiceImpl struct{}
 
 func (StringServiceImpl) Uppercase(s string) (string, error) {
