@@ -56,5 +56,6 @@ type VisitorC struct {
 }
 
 func (v *VisitorC) VisitAnimal(a *Animal) {
+	v.VisitorB.VisitAnimal(a)
 	fmt.Printf("Animal %s C visited\n", a.Name)
 }
