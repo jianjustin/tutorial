@@ -32,7 +32,7 @@ func NewVendingMachine(itemCount, itemPrice int) *VendingMachine {
 		vendingMachine: v,
 	}
 
-	v.setState(hasItemState)
+	v.SetState(hasItemState)
 	v.HasItem = hasItemState
 	v.ItemRequested = itemRequestedState
 	v.HasMoney = hasMoneyState
@@ -40,27 +40,27 @@ func NewVendingMachine(itemCount, itemPrice int) *VendingMachine {
 	return v
 }
 
-func (v *VendingMachine) requestItem() error {
+func (v *VendingMachine) RequestItem() error {
 	return v.CurrentState.requestItem()
 }
 
-func (v *VendingMachine) addItem(count int) error {
+func (v *VendingMachine) AddItem(count int) error {
 	return v.CurrentState.addItem(count)
 }
 
-func (v *VendingMachine) insertMoney(money int) error {
+func (v *VendingMachine) InsertMoney(money int) error {
 	return v.CurrentState.insertMoney(money)
 }
 
-func (v *VendingMachine) dispenseItem() error {
+func (v *VendingMachine) DispenseItem() error {
 	return v.CurrentState.dispenseItem()
 }
 
-func (v *VendingMachine) setState(s State) {
+func (v *VendingMachine) SetState(s State) {
 	v.CurrentState = s
 }
 
-func (v *VendingMachine) incrementItemCount(count int) {
+func (v *VendingMachine) IncrementItemCount(count int) {
 	fmt.Printf("Adding %d items\n", count)
 	v.ItemCount = v.ItemCount + count
 }

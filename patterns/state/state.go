@@ -18,8 +18,8 @@ func (i *NoItemState) requestItem() error {
 }
 
 func (i *NoItemState) addItem(count int) error {
-	i.vendingMachine.incrementItemCount(count)
-	i.vendingMachine.setState(i.vendingMachine.HasItem)
+	i.vendingMachine.IncrementItemCount(count)
+	i.vendingMachine.SetState(i.vendingMachine.HasItem)
 	return nil
 }
 
@@ -36,17 +36,17 @@ type HasItemState struct {
 
 func (i *HasItemState) requestItem() error {
 	if i.vendingMachine.ItemCount == 0 {
-		i.vendingMachine.setState(i.vendingMachine.NoItem)
+		i.vendingMachine.SetState(i.vendingMachine.NoItem)
 		return fmt.Errorf("No item present")
 	}
 	fmt.Printf("Item requestd\n")
-	i.vendingMachine.setState(i.vendingMachine.ItemRequested)
+	i.vendingMachine.SetState(i.vendingMachine.ItemRequested)
 	return nil
 }
 
 func (i *HasItemState) addItem(count int) error {
 	fmt.Printf("%d items added\n", count)
-	i.vendingMachine.incrementItemCount(count)
+	i.vendingMachine.IncrementItemCount(count)
 	return nil
 }
 
@@ -71,10 +71,10 @@ func (i *ItemRequestedState) addItem(count int) error {
 
 func (i *ItemRequestedState) insertMoney(money int) error {
 	if money < i.vendingMachine.ItemPrice {
-		return fmt.Errorf("Inserted money is less. Please insert %d", i.vendingMachine.itemPrice)
+		return fmt.Errorf("Inserted money is less. Please insert %d", i.vendingMachine.ItemPrice)
 	}
 	fmt.Println("Money entered is ok")
-	i.vendingMachine.setState(i.vendingMachine.HasMoney)
+	i.vendingMachine.SetState(i.vendingMachine.HasMoney)
 	return nil
 }
 func (i *ItemRequestedState) dispenseItem() error {
@@ -100,9 +100,9 @@ func (i *HasMoneyState) dispenseItem() error {
 	fmt.Println("Dispensing Item")
 	i.vendingMachine.ItemCount = i.vendingMachine.ItemCount - 1
 	if i.vendingMachine.ItemCount == 0 {
-		i.vendingMachine.setState(i.vendingMachine.NoItem)
+		i.vendingMachine.SetState(i.vendingMachine.NoItem)
 	} else {
-		i.vendingMachine.setState(i.vendingMachine.HasItem)
+		i.vendingMachine.SetState(i.vendingMachine.HasItem)
 	}
 	return nil
 }
