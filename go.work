@@ -2,8 +2,7 @@ go 1.20
 
 use (
 	./grpc
-	./microservices-app-01
-	./microservices-app-02
+	./microservices-app
 	./tutorial
 	./patterns
 )

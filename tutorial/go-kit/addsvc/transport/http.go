@@ -25,9 +25,8 @@ import (
 	"github.com/go-kit/kit/tracing/zipkin"
 	"github.com/go-kit/kit/transport"
 	httptransport "github.com/go-kit/kit/transport/http"
-
-	"github.com/go-kit/examples/addsvc/pkg/addendpoint"
-	"github.com/go-kit/examples/addsvc/pkg/addservice"
+	addendpoint "go.guide/tutorial/go-kit/addsvc/endpoint"
+	addservice "go.guide/tutorial/go-kit/addsvc/service"
 )
 
 // NewHTTPHandler returns an HTTP handler that makes a set of endpoints

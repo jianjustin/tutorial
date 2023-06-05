@@ -20,13 +20,13 @@ import (
 	"github.com/go-kit/kit/tracing/zipkin"
 	"github.com/go-kit/kit/transport"
 	grpctransport "github.com/go-kit/kit/transport/grpc"
-
-	"github.com/go-kit/examples/addsvc/pb"
-	"github.com/go-kit/examples/addsvc/pkg/addendpoint"
-	"github.com/go-kit/examples/addsvc/pkg/addservice"
+	addendpoint "go.guide/tutorial/go-kit/addsvc/endpoint"
+	pb "go.guide/tutorial/go-kit/addsvc/pb"
+	addservice "go.guide/tutorial/go-kit/addsvc/service"
 )
 
 type grpcServer struct {
+	pb.UnimplementedAddServer
 	sum    grpctransport.Handler
 	concat grpctransport.Handler
 }
