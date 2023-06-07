@@ -1,14 +1,12 @@
 package embeds
 
 import (
-	"embed"
 	"fmt"
 	"io"
 	"net/http"
-)
 
-//go:embed resources/*
-var staticFiles embed.FS
+	"go.guide/tutorial/embeds/resources"
+)
 
 func hello(w http.ResponseWriter, req *http.Request) {
 
@@ -26,7 +24,7 @@ func headers(w http.ResponseWriter, req *http.Request) {
 
 func indexHandler(w http.ResponseWriter, r *http.Request) {
 	// 使用 embed.FS.Open() 函数打开 index.html 文件
-	file, err := staticFiles.Open("resources/index.html")
+	file, err := resources.StaticFiles.Open("resources/index.html")
 	if err != nil {
 		http.Error(w, "File not found", http.StatusNotFound)
 		return
