@@ -10,7 +10,18 @@ import (
 	"github.com/go-kit/kit/endpoint"
 )
 
-func MakeAddEndpoint(svc service.StringService) endpoint.Endpoint {
+func MakeAddEndpoint(svc service.AddService) endpoint.Endpoint {
+	return func(_ context.Context, request interface{}) (interface{}, error) {
+		req := request.(model.AddRequest)
+		v, err := svc.Add(req.A)
+		if err != nil {
+			return model.AddResponse{V: v, Err: err.Error()}, nil
+		}
+		return model.AddResponse{V: v}, nil
+	}
+}
+
+func MakeAddAfterMulEndpoint(svc service.AddService) endpoint.Endpoint {
 	return func(_ context.Context, request interface{}) (interface{}, error) {
 		req := request.(model.AddRequest)
 		v, err := svc.Add(req.A)

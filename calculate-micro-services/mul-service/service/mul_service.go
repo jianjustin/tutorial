@@ -6,12 +6,12 @@ import (
 
 var ErrEmpty = errors.New("empty string")
 
-type StringService interface {
+type MulService interface {
 	Mul(int) (int, error)
 }
 
-type BaseStringService struct{}
+type BaseMulService struct{}
 
-func (BaseStringService) Mul(a int) (int, error) {
+func (BaseMulService) Mul(a int) (int, error) {
 	return a * 3, nil
 }

@@ -9,7 +9,18 @@ import (
 	"net/http"
 )
 
-func MakeMulEndpoint(svc service.StringService) endpoint.Endpoint {
+func MakeMulEndpoint(svc service.MulService) endpoint.Endpoint {
+	return func(_ context.Context, request interface{}) (interface{}, error) {
+		req := request.(model.MulRequest)
+		v, err := svc.Mul(req.A)
+		if err != nil {
+			return model.MulResponse{V: v, Err: err.Error()}, nil
+		}
+		return model.MulResponse{V: v}, nil
+	}
+}
+
+func MakeMulAfterAddEndpoint(svc service.MulService) endpoint.Endpoint {
 	return func(_ context.Context, request interface{}) (interface{}, error) {
 		req := request.(model.MulRequest)
 		v, err := svc.Mul(req.A)
