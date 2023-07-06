@@ -8,4 +8,5 @@ use (
 	kit
 	calculate-micro-services/add-service
 	calculate-micro-services/mul-service
+	calculate-grpc-services/add-service
 )
