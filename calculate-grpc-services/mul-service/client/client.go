@@ -11,18 +11,19 @@ func main() {
 	if err != nil {
 		log.Fatalf("unable to Dial: %+v", err)
 	}
-
+	/**
 	client := NewMulClient(cc)
 	_, v, err := client.Mul(context.Background(), int64(42))
 	if err != nil {
 		log.Fatalf("unable to Test: %+v", err)
 	}
 	log.Println(v)
-
+	*/
 	client1 := NewMulAfterAddClient(cc)
-	_, v, err = client1.MulAfterAdd(context.Background(), int64(42))
+	_, v, err := client1.MulAfterAdd(context.Background(), int64(42))
 	if err != nil {
 		log.Fatalf("unable to Test: %+v", err)
 	}
+
 	log.Println(v)
 }

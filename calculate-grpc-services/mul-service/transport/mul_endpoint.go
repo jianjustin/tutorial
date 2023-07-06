@@ -3,8 +3,11 @@ package transport
 import (
 	"context"
 	"github.com/go-kit/kit/endpoint"
+	"github.com/go-kit/log"
+	"go.guide/mul-grpc-service/middleware"
 	"go.guide/mul-grpc-service/pb"
 	"go.guide/mul-grpc-service/service"
+	"os"
 )
 
 func MakeMulGRPCServer(svc service.MulService) pb.MulServiceServer {
@@ -26,7 +29,16 @@ func (s *mulGrpcServer) Mul(ctx context.Context, req *pb.MulRequest) (*pb.MulRes
 }
 
 func (s *mulGrpcServer) MulAfterAdd(ctx context.Context, req *pb.MulRequest) (*pb.MulResponse, error) {
-	resp, err := s.mulAfterAdd(ctx, req)
+	logger := log.NewLogfmtLogger(os.Stdout)
+	svc1 := middleware.ProxyingMiddleware(context.Background(), "/services/add", logger)
+	addService := svc1(nil)
+	ctx, a, err := addService.Add(ctx, req.A)
+	if err != nil {
+		return nil, err
+	}
+	req.A = a
+
+	resp, err := s.mul(ctx, req)
 	return resp.(*pb.MulResponse), err
 }
 

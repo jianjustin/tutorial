@@ -1,7 +1,10 @@
 package main
 
 import (
+	"fmt"
+	"github.com/go-kit/kit/sd/etcdv3"
 	pb2 "go.guide/add-grpc-service/pb"
+	"go.guide/add-grpc-service/register"
 	"go.guide/add-grpc-service/service"
 	"go.guide/add-grpc-service/transport"
 	"google.golang.org/grpc"
@@ -22,5 +25,18 @@ func main() {
 	defer server.GracefulStop()
 
 	pb2.RegisterAddServiceServer(server, transport.MakeAddGRPCServer(service.NewAddService()))
+
+	r := register.GetEtcdRegister()
+	if r == nil {
+		fmt.Println("get register client failed")
+		return
+	}
+	err = r.Register(etcdv3.Service{Key: "/services/add/", Value: hostPort})
+	if err != nil {
+		fmt.Println("register service failed")
+		return
+	}
+	defer r.Deregister(etcdv3.Service{Key: "/services/add/", Value: hostPort})
+
 	_ = server.Serve(sc)
 }
