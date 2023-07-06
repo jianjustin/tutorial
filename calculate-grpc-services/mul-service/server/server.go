@@ -1,16 +1,16 @@
 package main
 
 import (
-	pb2 "go.guide/add-grpc-service/pb"
-	"go.guide/add-grpc-service/service"
-	"go.guide/add-grpc-service/transport"
+	"go.guide/mul-grpc-service/pb"
+	"go.guide/mul-grpc-service/service"
+	"go.guide/mul-grpc-service/transport"
 	"google.golang.org/grpc"
 	"log"
 	"net"
 )
 
 const (
-	hostPort string = "localhost:8002"
+	hostPort string = "localhost:8003"
 )
 
 func main() {
@@ -21,6 +21,6 @@ func main() {
 	}
 	defer server.GracefulStop()
 
-	pb2.RegisterAddServiceServer(server, transport.MakeAddGRPCServer(service.NewAddService()))
+	pb.RegisterMulServiceServer(server, transport.MakeMulGRPCServer(service.NewMulService()))
 	_ = server.Serve(sc)
 }

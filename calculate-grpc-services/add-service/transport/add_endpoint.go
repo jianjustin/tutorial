@@ -2,25 +2,10 @@ package transport
 
 import (
 	"context"
-	"encoding/json"
 	"github.com/go-kit/kit/endpoint"
 	pb2 "go.guide/add-grpc-service/pb"
 	"go.guide/add-grpc-service/service"
 )
-
-type addService struct{}
-
-func (addService) Add(ctx context.Context, a int64) (context.Context, int64, error) {
-	return nil, a + int64(3), nil
-}
-
-func (addService) AddAfterMul(ctx context.Context, a int64) (context.Context, int64, error) {
-	return nil, a + int64(4), nil
-}
-
-func NewAddService() service.AddService {
-	return addService{}
-}
 
 func MakeAddGRPCServer(svc service.AddService) pb2.AddServiceServer {
 	return &addGrpcServer{
@@ -37,18 +22,12 @@ type addGrpcServer struct {
 
 func (s *addGrpcServer) Add(ctx context.Context, req *pb2.AddRequest) (*pb2.AddResponse, error) {
 	resp, err := s.add(ctx, req)
-	str, _ := json.Marshal(resp)
-	res := &pb2.AddResponse{}
-	json.Unmarshal(str, res)
-	return res, err
+	return resp.(*pb2.AddResponse), err
 }
 
 func (s *addGrpcServer) AddAfterMul(ctx context.Context, req *pb2.AddRequest) (*pb2.AddResponse, error) {
 	resp, err := s.addAfterMul(ctx, req)
-	str, _ := json.Marshal(resp)
-	res := &pb2.AddResponse{}
-	json.Unmarshal(str, res)
-	return res, err
+	return resp.(*pb2.AddResponse), err
 }
 
 func makeAddEndpoint(svc service.AddService) endpoint.Endpoint {

@@ -1,4 +1,4 @@
-module go.guide/add-grpc-service
+module go.guide/mul-grpc-service
 
 go 1.18
 
