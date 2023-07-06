@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"github.com/go-kit/kit/endpoint"
-	"go.guide/add-grpc-service/model"
 	pb2 "go.guide/add-grpc-service/pb"
 	"go.guide/add-grpc-service/service"
 )
@@ -54,22 +53,22 @@ func (s *addGrpcServer) AddAfterMul(ctx context.Context, req *pb2.AddRequest) (*
 
 func makeAddEndpoint(svc service.AddService) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
-		req := request.(model.AddRequest)
-		newCtx, v, err := svc.Add(ctx, req.A)
-		return &model.AddResponse{
-			V:   v,
-			Ctx: newCtx,
+		req := request.(*pb2.AddRequest)
+		_, v, err := svc.Add(ctx, req.A)
+		return &pb2.AddResponse{
+			V: v,
+			//Ctx: newCtx,
 		}, err
 	}
 }
 
 func makeAddAfterMulEndpoint(svc service.AddService) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
-		req := request.(model.AddRequest)
-		newCtx, v, err := svc.AddAfterMul(ctx, req.A)
-		return &model.AddResponse{
-			V:   v,
-			Ctx: newCtx,
+		req := request.(*pb2.AddRequest)
+		_, v, err := svc.AddAfterMul(ctx, req.A)
+		return &pb2.AddResponse{
+			V: v,
+			//Ctx: newCtx,
 		}, err
 	}
 }
