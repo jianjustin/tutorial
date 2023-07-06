@@ -22,4 +22,11 @@ func main() {
 		log.Fatalf("unable to Test: %+v", err)
 	}
 	log.Println(v)
+
+	client1 := NewAddAfterMulClient(cc)
+	_, v, err = client1.AddAfterMul(context.Background(), int64(42))
+	if err != nil {
+		log.Fatalf("unable to Test: %+v", err)
+	}
+	log.Println(v)
 }

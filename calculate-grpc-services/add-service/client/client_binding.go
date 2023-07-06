@@ -44,3 +44,16 @@ func NewAddClient(cc *grpc.ClientConn) service.AddService {
 		).Endpoint(),
 	}
 }
+
+func NewAddAfterMulClient(cc *grpc.ClientConn) service.AddService {
+	return &AddClientBinding{
+		E: grpctransport.NewClient(
+			cc,
+			"pb.AddService",
+			"AddAfterMul",
+			model.EncodeRequest,
+			model.DecodeResponse,
+			&pb.AddResponse{},
+		).Endpoint(),
+	}
+}
