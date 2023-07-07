@@ -2,41 +2,35 @@ package main
 
 import (
 	"fmt"
-	"github.com/go-kit/kit/sd/etcdv3"
+	"github.com/go-kit/log"
+	log2 "go.guide/add-grpc-service/log"
+	"go.guide/add-grpc-service/middleware"
 	pb2 "go.guide/add-grpc-service/pb"
 	"go.guide/add-grpc-service/register"
 	"go.guide/add-grpc-service/service"
 	"go.guide/add-grpc-service/transport"
 	"google.golang.org/grpc"
-	"log"
 	"net"
+	"os"
 )
 
-const (
-	hostPort string = "localhost:8002"
-)
+const ()
 
 func main() {
 	server := grpc.NewServer()
-	sc, err := net.Listen("tcp", hostPort)
+	logger := log.With(log2.InitLogger(os.Stdout))
+	sc, err := net.Listen("tcp", middleware.HostPort)
 	if err != nil {
-		log.Fatalf("unable to listen: %+v", err)
+		log.With(logger, "level", "error").Log("msg", fmt.Sprintf("unable to listen %s", err))
 	}
 	defer server.GracefulStop()
 
+	svc := service.NewAddService()
+	svc = middleware.LoggingAddServiceMiddleware(logger)(svc)
+	svc = middleware.EtcdRegisterAddServiceMiddleware(register.GetEtcdRegister(), logger)(svc)
+
 	pb2.RegisterAddServiceServer(server, transport.MakeAddGRPCServer(service.NewAddService()))
 
-	r := register.GetEtcdRegister()
-	if r == nil {
-		fmt.Println("get register client failed")
-		return
-	}
-	err = r.Register(etcdv3.Service{Key: "/services/add/", Value: hostPort})
-	if err != nil {
-		fmt.Println("register service failed")
-		return
-	}
-	defer r.Deregister(etcdv3.Service{Key: "/services/add/", Value: hostPort})
-
+	log.With(logger, "level", "info").Log("msg", fmt.Sprintf("grpc server start at %s", middleware.HostPort))
 	_ = server.Serve(sc)
 }
