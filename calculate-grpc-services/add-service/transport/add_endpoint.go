@@ -7,25 +7,25 @@ import (
 	"go.guide/add-grpc-service/service"
 )
 
-func MakeAddGRPCServer(svc service.AddService) pb2.AddServiceServer {
-	return &addGrpcServer{
+func Endpoints(svc service.AddService) EndpointsSet {
+	return EndpointsSet{
 		add:         makeAddEndpoint(svc),
 		addAfterMul: makeAddAfterMulEndpoint(svc),
 	}
 }
 
-type addGrpcServer struct {
+type EndpointsSet struct {
 	pb2.UnimplementedAddServiceServer
 	add         endpoint.Endpoint
 	addAfterMul endpoint.Endpoint
 }
 
-func (s *addGrpcServer) Add(ctx context.Context, req *pb2.AddRequest) (*pb2.AddResponse, error) {
+func (s *EndpointsSet) Add(ctx context.Context, req *pb2.AddRequest) (*pb2.AddResponse, error) {
 	resp, err := s.add(ctx, req)
 	return resp.(*pb2.AddResponse), err
 }
 
-func (s *addGrpcServer) AddAfterMul(ctx context.Context, req *pb2.AddRequest) (*pb2.AddResponse, error) {
+func (s *EndpointsSet) AddAfterMul(ctx context.Context, req *pb2.AddRequest) (*pb2.AddResponse, error) {
 	resp, err := s.addAfterMul(ctx, req)
 	return resp.(*pb2.AddResponse), err
 }
