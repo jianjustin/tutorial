@@ -1,9 +1,8 @@
-package middleware
+package register
 
 import (
 	"github.com/go-kit/kit/sd/etcdv3"
 	"github.com/go-kit/log"
-	"go.guide/add-grpc-service/register"
 	"go.guide/add-grpc-service/service"
 )
 
@@ -12,7 +11,7 @@ const ServiceKey string = "/services/add/"
 
 func EtcdRegisterAddServiceMiddleware(e etcdv3.Client, logger log.Logger) service.AddServiceMiddleware {
 	return func(next service.AddService) service.AddService {
-		r := register.GetEtcdRegister()
+		r := GetEtcdRegister()
 		if r == nil {
 			log.With(logger, "level", "error").Log("msg", "get register client failed")
 			return next

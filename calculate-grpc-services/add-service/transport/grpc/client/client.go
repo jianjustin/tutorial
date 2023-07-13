@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	transportgrpc "go.guide/add-grpc-service/transport/grpc"
 	"google.golang.org/grpc"
 	"log"
 )
@@ -16,14 +17,14 @@ func main() {
 		log.Fatalf("unable to Dial: %+v", err)
 	}
 
-	client := NewAddClient(cc)
+	client := transportgrpc.NewAddClient(cc)
 	_, v, err := client.Add(context.Background(), int64(42))
 	if err != nil {
 		log.Fatalf("unable to Test: %+v", err)
 	}
 	log.Println(v)
 
-	client1 := NewAddAfterMulClient(cc)
+	client1 := transportgrpc.NewAddAfterMulClient(cc)
 	_, v, err = client1.AddAfterMul(context.Background(), int64(42))
 	if err != nil {
 		log.Fatalf("unable to Test: %+v", err)

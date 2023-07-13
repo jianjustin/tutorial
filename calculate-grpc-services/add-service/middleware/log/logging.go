@@ -1,10 +1,10 @@
-package middleware
+package log
 
 import (
 	"context"
 	"github.com/go-kit/log"
-	"go.guide/add-grpc-service/model"
 	"go.guide/add-grpc-service/service"
+	"go.guide/add-grpc-service/transport"
 	"time"
 )
 
@@ -26,7 +26,7 @@ func (M loggingAddServiceMiddleware) Add(ctx context.Context, a int64) (context.
 	defer func(begin time.Time) {
 		M.logger.Log(
 			"method", "Add",
-			"request", model.AddRequest{A: a},
+			"request", transport.AddRequest{A: a},
 			"took", time.Since(begin))
 	}(time.Now())
 	return M.next.Add(ctx, a)
@@ -36,7 +36,7 @@ func (M loggingAddServiceMiddleware) AddAfterMul(ctx context.Context, a int64) (
 	defer func(begin time.Time) {
 		M.logger.Log(
 			"method", "AddAfterMul",
-			"request", model.AddRequest{A: a},
+			"request", transport.AddRequest{A: a},
 			"took", time.Since(begin))
 	}(time.Now())
 	return M.next.AddAfterMul(ctx, a)
