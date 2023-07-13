@@ -20,23 +20,12 @@ import (
 	"syscall"
 )
 
-const ()
-
 func main() {
 	logger := log.With(log2.InitLogger(os.Stdout))
 	g, ctx := errgroup.WithContext(context.Background())
 	g.Go(func() error {
 		return InterruptHandler(ctx)
 	})
-
-	/**
-	server := grpc.NewServer()
-	logger := log.With(log2.InitLogger(os.Stdout))
-	sc, err := net.Listen("tcp", middleware.HostPort)
-	if err != nil {
-		log.With(logger, "level", "error").Log("msg", fmt.Sprintf("unable to listen %s", err))
-	}
-	defer server.GracefulStop()*/
 
 	svc := service.NewAddService()
 	svc = middleware.LoggingAddServiceMiddleware(logger)(svc)
@@ -45,11 +34,13 @@ func main() {
 
 	log.With(logger, "level", "info").Log("msg", fmt.Sprintf("grpc server start at %s", middleware.HostPort))
 
-	grpcAddr := ":8081"
 	g.Go(func() error {
-		return ServeGRPC(ctx, &endpoints, grpcAddr, log.With(logger, "transport", "GRPC"))
+		return ServeGRPC(ctx, &endpoints, middleware.HostPort, log.With(logger, "transport", "GRPC"))
 	})
 
+	if err := g.Wait(); err != nil {
+		log.With(logger, "level", "error").Log("error", err)
+	}
 }
 
 // InterruptHandler handles first SIGINT and SIGTERM and returns it as error.

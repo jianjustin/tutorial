@@ -3,6 +3,7 @@ package transport
 import (
 	"context"
 	"github.com/go-kit/kit/endpoint"
+	"go.guide/add-grpc-service/model"
 	pb2 "go.guide/add-grpc-service/pb"
 	"go.guide/add-grpc-service/service"
 )
@@ -32,22 +33,22 @@ func (s *EndpointsSet) AddAfterMul(ctx context.Context, req *pb2.AddRequest) (*p
 
 func makeAddEndpoint(svc service.AddService) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
-		req := request.(*pb2.AddRequest)
+		req := request.(model.AddRequest)
 		_, v, err := svc.Add(ctx, req.A)
-		return &pb2.AddResponse{
-			V: v,
-			//Ctx: newCtx,
+		return model.AddResponse{
+			V:   v,
+			Ctx: ctx,
 		}, err
 	}
 }
 
 func makeAddAfterMulEndpoint(svc service.AddService) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
-		req := request.(*pb2.AddRequest)
+		req := request.(model.AddRequest)
 		_, v, err := svc.AddAfterMul(ctx, req.A)
-		return &pb2.AddResponse{
-			V: v,
-			//Ctx: newCtx,
+		return model.AddResponse{
+			V:   v,
+			Ctx: ctx,
 		}, err
 	}
 }

@@ -16,7 +16,7 @@ func (addService) Add(ctx context.Context, a int64) (context.Context, int64, err
 }
 
 func (addService) AddAfterMul(ctx context.Context, a int64) (context.Context, int64, error) {
-	return nil, a + int64(4), nil
+	return nil, a*int64(3) + int64(3), nil
 }
 
 func NewAddService() AddService {

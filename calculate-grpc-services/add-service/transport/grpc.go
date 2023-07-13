@@ -25,7 +25,7 @@ func (a addServiceServer) Add(ctx context.Context, request *pb.AddRequest) (*pb.
 }
 
 func (a addServiceServer) AddAfterMul(ctx context.Context, request *pb.AddRequest) (*pb.AddResponse, error) {
-	_, resp, err := a.add.ServeGRPC(ctx, request)
+	_, resp, err := a.addAfterMul.ServeGRPC(ctx, request)
 	if err != nil {
 		return nil, err
 	}
@@ -39,14 +39,14 @@ func NewGRPCServer(endpoints *EndpointsSet, logger log.Logger, tracer opentracin
 			model.DecodeRequest,
 			model.EncodeResponse,
 			append(opts, grpc.ServerBefore(
-				opentracing.GRPCToContext(tracer, "Concat", logger)))...,
+				opentracing.GRPCToContext(tracer, "add", logger)))...,
 		),
 		addAfterMul: grpc.NewServer(
 			endpoints.addAfterMul,
 			model.DecodeRequest,
 			model.EncodeResponse,
 			append(opts, grpc.ServerBefore(
-				opentracing.GRPCToContext(tracer, "Sum", logger)))...,
+				opentracing.GRPCToContext(tracer, "addAfterMul", logger)))...,
 		),
 	}
 }

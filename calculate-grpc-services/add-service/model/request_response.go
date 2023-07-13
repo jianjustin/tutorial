@@ -25,7 +25,7 @@ func DecodeRequest(ctx context.Context, req interface{}) (interface{}, error) {
 }
 
 func EncodeResponse(ctx context.Context, resp interface{}) (interface{}, error) {
-	r := resp.(*AddResponse)
+	r := resp.(AddResponse)
 	return &pb2.AddResponse{V: r.V}, nil
 }
 
