@@ -4,9 +4,9 @@ import (
 	"context"
 	"github.com/go-kit/kit/endpoint"
 	grpctransport "github.com/go-kit/kit/transport/grpc"
-	"go.guide/add-grpc-service/model"
 	"go.guide/add-grpc-service/pb"
 	"go.guide/add-grpc-service/service"
+	"go.guide/mul-grpc-service/model"
 	"google.golang.org/grpc"
 )
 

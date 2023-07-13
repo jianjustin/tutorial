@@ -10,4 +10,5 @@ use (
 	calculate-micro-services/mul-service
 	calculate-grpc-services/add-service
 	calculate-grpc-services/mul-service
+	calculate-grpc-services/sub_service
 )

@@ -4,12 +4,12 @@ import (
 	"context"
 	"github.com/go-kit/kit/sd/etcdv3"
 	"github.com/go-kit/log"
-	"go.guide/add-grpc-service/service"
+	"go.guide/sub-grpc-service/service"
 	"time"
 )
 
-const HostPort string = "localhost:8002"
-const ServiceKey string = "/services/add/"
+const HostPort string = "localhost:8003"
+const ServiceKey string = "/services/sub/"
 
 func GetEtcdRegister() etcdv3.Client {
 	client, _ := etcdv3.NewClient(
@@ -23,8 +23,8 @@ func GetEtcdRegister() etcdv3.Client {
 	return client
 }
 
-func EtcdRegisterAddServiceMiddleware(e etcdv3.Client, logger log.Logger) service.AddServiceMiddleware {
-	return func(next service.AddService) service.AddService {
+func EtcdRegisterAddServiceMiddleware(e etcdv3.Client, logger log.Logger) service.SubServiceMiddleware {
+	return func(next service.SubService) service.SubService {
 		r := GetEtcdRegister()
 		if r == nil {
 			log.With(logger, "level", "error").Log("msg", "get register client failed")
