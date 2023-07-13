@@ -35,7 +35,7 @@ func EtcdRegisterAddServiceMiddleware(e etcdv3.Client, logger log.Logger) servic
 			log.With(logger, "level", "error").Log("msg", "register service failed")
 			return next
 		}
-		defer r.Deregister(etcdv3.Service{Key: ServiceKey, Value: HostPort})
+		//defer r.Deregister(etcdv3.Service{Key: ServiceKey, Value: HostPort})
 
 		return next
 	}

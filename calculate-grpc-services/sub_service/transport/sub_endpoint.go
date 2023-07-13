@@ -3,8 +3,11 @@ package transport
 import (
 	"context"
 	"github.com/go-kit/kit/endpoint"
+	"github.com/go-kit/log"
 	pb "go.guide/sub-grpc-service/pb"
+	"go.guide/sub-grpc-service/proxying"
 	"go.guide/sub-grpc-service/service"
+	"os"
 )
 
 func Endpoints(svc service.SubService) EndpointsSet {
@@ -20,16 +23,6 @@ type EndpointsSet struct {
 	SubAfterAddEndpoint endpoint.Endpoint
 }
 
-func (s *EndpointsSet) Sub(ctx context.Context, req *pb.SubRequest) (*pb.SubResponse, error) {
-	resp, err := s.SubEndpoint(ctx, req)
-	return resp.(*pb.SubResponse), err
-}
-
-func (s *EndpointsSet) SubAfterAdd(ctx context.Context, req *pb.SubRequest) (*pb.SubResponse, error) {
-	resp, err := s.SubAfterAddEndpoint(ctx, req)
-	return resp.(*pb.SubResponse), err
-}
-
 func makeSubEndpoint(svc service.SubService) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req := request.(*SubRequest)
@@ -43,7 +36,15 @@ func makeSubEndpoint(svc service.SubService) endpoint.Endpoint {
 func makeSubAfterAddEndpoint(svc service.SubService) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req := request.(*SubRequest)
-		_, v, err := svc.SubAfterAdd(ctx, req.A)
+		logger := log.NewLogfmtLogger(os.Stdout)
+		svc1 := proxying.ProxyingMiddleware(context.Background(), "/services/add", logger)
+		addService := svc1(nil)
+		ctx, a, err := addService.Add(ctx, req.A)
+		if err != nil {
+			return nil, err
+		}
+		req.A = a
+		_, v, err := svc.Sub(ctx, req.A)
 		return &SubResponse{
 			V: v,
 		}, err
