@@ -11,6 +11,6 @@ services:
     image: add-grpc-service:latest
     ports:
       - "18080:18080"
-      - "18082:8082"
+      - "18002:8002"
     depends_on:
       - my-etcd

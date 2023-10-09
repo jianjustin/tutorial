@@ -41,7 +41,7 @@ func main() {
 	})
 
 	g.Go(func() error {
-		return ServeHTTP(ctx, &endpoints, "localhost:18080", log.With(logger, "transport", "HTTP"))
+		return ServeHTTP(ctx, &endpoints, ":18080", log.With(logger, "transport", "HTTP"))
 	})
 
 	if err := g.Wait(); err != nil {
