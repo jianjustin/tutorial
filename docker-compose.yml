@@ -1,0 +1,16 @@
+version: '3'
+services:
+  my-etcd:
+    image: quay.io/coreos/etcd
+    command: ["/usr/local/bin/etcd", "--name", "my-etcd", "--advertise-client-urls", "http://0.0.0.0:2379", "--listen-client-urls", "http://0.0.0.0:2379", "--initial-advertise-peer-urls", "http://0.0.0.0:2380", "--listen-peer-urls", "http://0.0.0.0:2380", "--initial-cluster", "my-etcd=http://0.0.0.0:2380"]
+    ports:
+      - "2379:2379"
+      - "2380:2380"
+
+  add-grpc-service:
+    image: add-grpc-service:latest
+    ports:
+      - "18080:18080"
+      - "18082:8082"
+    depends_on:
+      - my-etcd
