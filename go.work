@@ -1,15 +1,7 @@
 go 1.20
 
 use (
-	grpc
-	microservices-app
-	tutorial
-	patterns
-	kit
-	calculate-micro-services/add-service
-	calculate-micro-services/mul-service
-	calculate-grpc-services/add-service
-	calculate-grpc-services/mul-service
-	calculate-grpc-services/sub_service
-	nats
+	add-service
+	mul-service
+	sub_service
 )

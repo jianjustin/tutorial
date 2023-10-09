@@ -14,7 +14,7 @@
 # Dependency directories (remove the comment below to include it)
 # vendor/
 .idea/
-Go.Guide.iml
+jianjustin.iml
 modules.xml
 vcs.xml
 
