@@ -44,7 +44,7 @@ func makeSubAfterAddEndpoint(svc service.SubService) endpoint.Endpoint {
 			return nil, err
 		}
 		req.A = a
-		_, v, err := svc.Sub(ctx, req.A)
+		_, v, err := svc.SubAfterAdd(ctx, req.A)
 		return &SubResponse{
 			V: v,
 		}, err
