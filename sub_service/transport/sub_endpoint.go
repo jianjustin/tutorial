@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/go-kit/kit/endpoint"
 	"github.com/go-kit/log"
+	"jianjustin/sub-grpc-service/middleware/otel"
 	pb "jianjustin/sub-grpc-service/pb"
 	"jianjustin/sub-grpc-service/proxying"
 	"jianjustin/sub-grpc-service/service"
@@ -25,6 +26,9 @@ type EndpointsSet struct {
 
 func makeSubEndpoint(svc service.SubService) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
+		ctx, span := otel.Tracer.Start(ctx, "sub")
+		defer span.End()
+
 		req := request.(*SubRequest)
 		_, v, err := svc.Sub(ctx, req.A)
 		return &SubResponse{
@@ -35,6 +39,9 @@ func makeSubEndpoint(svc service.SubService) endpoint.Endpoint {
 
 func makeSubAfterAddEndpoint(svc service.SubService) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
+		ctx, span := otel.Tracer.Start(ctx, "subAfterAdd")
+		defer span.End()
+
 		req := request.(*SubRequest)
 		logger := log.NewLogfmtLogger(os.Stdout)
 		svc1 := proxying.ProxyingMiddleware(context.Background(), "/services/add", logger)

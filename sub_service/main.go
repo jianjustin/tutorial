@@ -9,6 +9,7 @@ import (
 	"golang.org/x/sync/errgroup"
 	"google.golang.org/grpc"
 	log2 "jianjustin/sub-grpc-service/middleware/log"
+	"jianjustin/sub-grpc-service/middleware/otel"
 	register2 "jianjustin/sub-grpc-service/middleware/register"
 	pb2 "jianjustin/sub-grpc-service/pb"
 	"jianjustin/sub-grpc-service/service"
@@ -28,6 +29,18 @@ func main() {
 	g.Go(func() error {
 		return InterruptHandler(ctx)
 	})
+
+	// Set up OpenTelemetry.
+	serviceName := "dice"
+	serviceVersion := "0.1.0"
+	otelShutdown, err := otel.SetupOTelSDK(ctx, serviceName, serviceVersion)
+	if err != nil {
+		return
+	}
+	// Handle shutdown properly so nothing leaks.
+	defer func() {
+		err = errors.Join(err, otelShutdown(context.Background()))
+	}()
 
 	svc := service.NewSubService()
 	svc = log2.LoggingSubServiceMiddleware(logger)(svc)
