@@ -2,19 +2,21 @@ package register
 
 import (
 	"context"
+	"fmt"
 	"github.com/go-kit/kit/sd/etcdv3"
 	"github.com/go-kit/log"
 	"jianjustin/sub-grpc-service/service"
 	"time"
 )
 
-const HostPort string = "localhost:8003"
+const Host string = "sub-grpc-service"
+const HostPort string = ":8003"
 const ServiceKey string = "/services/sub/"
 
 func GetEtcdRegister() etcdv3.Client {
 	client, _ := etcdv3.NewClient(
 		context.Background(),
-		[]string{"http://127.0.0.1:2379"},
+		[]string{"http://my-etcd:2379"},
 		etcdv3.ClientOptions{
 			DialTimeout:   3 * time.Second,
 			DialKeepAlive: 3 * time.Second,
@@ -30,7 +32,7 @@ func EtcdRegisterAddServiceMiddleware(e etcdv3.Client, logger log.Logger) servic
 			log.With(logger, "level", "error").Log("msg", "get register client failed")
 			return next
 		}
-		err := r.Register(etcdv3.Service{Key: ServiceKey, Value: HostPort})
+		err := r.Register(etcdv3.Service{Key: ServiceKey, Value: fmt.Sprintf("%s%s", Host, HostPort)})
 		if err != nil {
 			log.With(logger, "level", "error").Log("msg", "register service failed")
 			return next

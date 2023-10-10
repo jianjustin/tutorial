@@ -13,7 +13,7 @@ import (
 	"github.com/sony/gobreaker"
 	"golang.org/x/time/rate"
 	"google.golang.org/grpc"
-	"jianjustin/add-grpc-service/pb"
+	"jianjustin/sub-grpc-service/pb"
 	"jianjustin/sub-grpc-service/service"
 	"time"
 )
@@ -42,7 +42,7 @@ func ProxyingMiddleware(ctx context.Context, serviceName string, logger log.Logg
 
 	client, err := etcdv3.NewClient(
 		context.Background(),
-		[]string{"http://127.0.0.1:2379"},
+		[]string{"http://my-etcd:2379"},
 		etcdv3.ClientOptions{
 			DialTimeout:   3 * time.Second,
 			DialKeepAlive: 3 * time.Second,

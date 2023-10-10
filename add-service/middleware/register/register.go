@@ -2,12 +2,14 @@ package register
 
 import (
 	"context"
+	"fmt"
 	"github.com/go-kit/kit/sd/etcdv3"
 	"github.com/go-kit/log"
 	"jianjustin/add-grpc-service/service"
 	"time"
 )
 
+const Host string = "add-grpc-service"
 const HostPort string = ":8002"
 const ServiceKey string = "/services/add/"
 
@@ -30,7 +32,7 @@ func EtcdRegisterAddServiceMiddleware(e etcdv3.Client, logger log.Logger) servic
 			log.With(logger, "level", "error").Log("msg", "get register client failed")
 			return next
 		}
-		err := r.Register(etcdv3.Service{Key: ServiceKey, Value: HostPort})
+		err := r.Register(etcdv3.Service{Key: ServiceKey, Value: fmt.Sprintf("%s%s", Host, HostPort)})
 		if err != nil {
 			log.With(logger, "level", "error").Log("msg", "register service failed")
 			return next

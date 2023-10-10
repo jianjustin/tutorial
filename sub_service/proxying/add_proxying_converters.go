@@ -2,7 +2,7 @@ package proxying
 
 import (
 	"context"
-	"jianjustin/add-grpc-service/pb"
+	"jianjustin/sub-grpc-service/pb"
 )
 
 type AddRequest struct {

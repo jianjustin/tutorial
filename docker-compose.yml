@@ -14,3 +14,11 @@ services:
       - "18002:8002"
     depends_on:
       - my-etcd
+
+  sub-grpc-service:
+    image: sub-grpc-service:latest
+    ports:
+      - "18081:18081"
+      - "18003:8003"
+    depends_on:
+      - my-etcd
