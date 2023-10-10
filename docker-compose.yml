@@ -7,6 +7,16 @@ services:
       - "2379:2379"
       - "2380:2380"
 
+  my-prometheus:
+    image: prom/prometheus
+    volumes:
+      - ./prometheus-config/prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+
+
   add-grpc-service:
     image: add-grpc-service:latest
     ports:
@@ -14,6 +24,7 @@ services:
       - "18002:8002"
     depends_on:
       - my-etcd
+      - my-prometheus
 
   sub-grpc-service:
     image: sub-grpc-service:latest
@@ -22,3 +33,4 @@ services:
       - "18003:8003"
     depends_on:
       - my-etcd
+      - my-prometheus
