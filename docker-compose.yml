@@ -3,6 +3,8 @@ services:
   my-etcd:
     image: quay.io/coreos/etcd
     command: ["/usr/local/bin/etcd", "--name", "my-etcd", "--advertise-client-urls", "http://0.0.0.0:2379", "--listen-client-urls", "http://0.0.0.0:2379", "--initial-advertise-peer-urls", "http://0.0.0.0:2380", "--listen-peer-urls", "http://0.0.0.0:2380", "--initial-cluster", "my-etcd=http://0.0.0.0:2380"]
+    networks:
+      - microservices-tutorial
     ports:
       - "2379:2379"
       - "2380:2380"
@@ -13,15 +15,18 @@ services:
       - ./prometheus-config/prometheus.yml:/etc/prometheus/prometheus.yml
     ports:
       - "9090:9090"
+    networks:
+      - microservices-tutorial
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
-
 
   add-grpc-service:
     image: add-grpc-service:latest
     ports:
       - "18080:18080"
       - "18002:8002"
+    networks:
+      - microservices-tutorial
     depends_on:
       - my-etcd
       - my-prometheus
@@ -31,6 +36,11 @@ services:
     ports:
       - "18081:18081"
       - "18003:8003"
+    networks:
+      - microservices-tutorial
     depends_on:
       - my-etcd
       - my-prometheus
+
+networks:
+  microservices-tutorial:
