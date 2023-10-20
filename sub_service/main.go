@@ -31,9 +31,9 @@ func main() {
 	})
 
 	// Set up OpenTelemetry.
-	serviceName := "dice"
+	serviceName := "sub-service"
 	serviceVersion := "0.1.0"
-	otelShutdown, err := otel.SetupOTelSDK(ctx, serviceName, serviceVersion)
+	otelShutdown, err := otel.SetupOTelSDK(ctx, serviceName, serviceVersion, logger)
 	if err != nil {
 		return
 	}

@@ -3,11 +3,14 @@ package otel
 import (
 	"context"
 	"errors"
+	log2 "github.com/go-kit/log"
+	"go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracegrpc"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 	"time"
 
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/exporters/stdout/stdoutmetric"
-	"go.opentelemetry.io/otel/exporters/stdout/stdouttrace"
 	"go.opentelemetry.io/otel/sdk/metric"
 	"go.opentelemetry.io/otel/sdk/resource"
 	"go.opentelemetry.io/otel/sdk/trace"
@@ -21,7 +24,7 @@ var (
 
 // SetupOTelSDK bootstraps the OpenTelemetry pipeline.
 // If it does not return an error, make sure to call shutdown for proper cleanup.
-func SetupOTelSDK(ctx context.Context, serviceName, serviceVersion string) (shutdown func(context.Context) error, err error) {
+func SetupOTelSDK(ctx context.Context, serviceName, serviceVersion string, logger log2.Logger) (shutdown func(context.Context) error, err error) {
 	var shutdownFuncs []func(context.Context) error
 
 	// shutdown calls cleanup functions registered via shutdownFuncs.
@@ -49,7 +52,7 @@ func SetupOTelSDK(ctx context.Context, serviceName, serviceVersion string) (shut
 	}
 
 	// Setup trace provider.
-	tracerProvider, err := newTraceProvider(res)
+	tracerProvider, err := newTraceProvider(res, logger)
 	if err != nil {
 		handleErr(err)
 		return
@@ -77,12 +80,24 @@ func newResource(serviceName, serviceVersion string) (*resource.Resource, error)
 		))
 }
 
-func newTraceProvider(res *resource.Resource) (*trace.TracerProvider, error) {
-	traceExporter, err := stdouttrace.New(
-		stdouttrace.WithPrettyPrint())
+func newTraceProvider(res *resource.Resource, logger log2.Logger) (*trace.TracerProvider, error) {
+	//traceExporter, err := stdouttrace.New(stdouttrace.WithPrettyPrint())
+
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	defer cancel()
+	conn, err := grpc.DialContext(ctx, "my-jaeger:4317",
+		grpc.WithTransportCredentials(insecure.NewCredentials()),
+		grpc.WithBlock(),
+	)
+
 	if err != nil {
+		log2.With(logger, "level", "error").Log(errors.New("failed to connect to jaeger backend"))
+		//logger.Log(errors.New("failed to connect to jaeger backend"))
 		return nil, err
 	}
+
+	// Set up a trace exporter
+	traceExporter, err := otlptracegrpc.New(ctx, otlptracegrpc.WithGRPCConn(conn))
 
 	traceProvider := trace.NewTracerProvider(
 		trace.WithBatcher(traceExporter,
