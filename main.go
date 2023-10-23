@@ -1,24 +1,38 @@
 package main
 
 import (
-	"fmt"
 	"github.com/jianjustin/web-kit/kit"
+	"net/http"
 )
 
 func main() {
 	r := kit.New()
-	r.GET("/", func(c *kit.Context) {
-		fmt.Println(c.Writer, "URL.Path = %q\n", c.Req.URL.Path)
+	r.GET("/index", func(c *kit.Context) {
+		c.HTML(http.StatusOK, "<h1>Index Page</h1>")
 	})
+	v1 := r.Group("/v1")
+	{
+		v1.GET("/", func(c *kit.Context) {
+			c.HTML(http.StatusOK, "<h1>Hello Gee</h1>")
+		})
 
-	r.GET("/hello", func(c *kit.Context) {
-		for k, v := range c.Req.Header {
-			fmt.Println(c.Writer, "Header[%q] = %q\n", k, v)
-		}
-	})
-
-	err := r.Run(":9999")
-	if err != nil {
-		fmt.Println("Run error")
+		v1.GET("/hello", func(c *kit.Context) {
+			c.String(http.StatusOK, "hello %s, you're at %s\n", c.Query("name"), c.Path)
+		})
 	}
+	v2 := r.Group("/v2")
+	{
+		v2.GET("/hello/:name", func(c *kit.Context) {
+			c.String(http.StatusOK, "hello %s, you're at %s\n", c.Param("name"), c.Path)
+		})
+		v2.POST("/login", func(c *kit.Context) {
+			c.JSON(http.StatusOK, kit.H{
+				"username": c.PostForm("username"),
+				"password": c.PostForm("password"),
+			})
+		})
+
+	}
+
+	r.Run(":9999")
 }
