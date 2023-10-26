@@ -21,11 +21,14 @@ func onlyForV2() kit.HandlerFunc {
 
 func main() {
 	r := kit.New()
+	r.LoadHTMLGlob("templates/*")
 	v1 := r.Group("")
 	v1.Use(kit.Recovery())
 	{
 		v1.GET("/", func(c *kit.Context) {
-			c.String(http.StatusOK, "Hello Geektutu\n")
+			c.HTML(http.StatusOK, "css.tmpl", map[string]interface{}{
+				"name": "jianjustin",
+			})
 		})
 		// index out of range for testing Recovery()
 		v1.GET("/panic", func(c *kit.Context) {
