@@ -32,6 +32,7 @@ func main() {
 			names := []string{"geektutu"}
 			c.String(http.StatusOK, names[100])
 		})
+		v1.Static("/assets", "./static")
 	}
 
 	r.Run(":9999")
