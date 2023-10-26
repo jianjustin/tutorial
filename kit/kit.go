@@ -1,9 +1,9 @@
 package kit
 
 import (
-	"fmt"
 	"log"
 	"net/http"
+	"strings"
 )
 
 // HandlerFunc defines the request handler used by gee
@@ -65,13 +65,19 @@ func (engine *Engine) Run(addr string) (err error) {
 	return http.ListenAndServe(addr, engine)
 }
 
+// Use is defined to add middleware to the group
+func (group *RouterGroup) Use(middlewares ...HandlerFunc) {
+	group.middlewares = append(group.middlewares, middlewares...)
+}
+
 func (engine *Engine) ServeHTTP(w http.ResponseWriter, req *http.Request) {
-	key := req.Method + "-" + req.URL.Path
-	if handler, ok := engine.router.handlers[key]; ok {
-		c := newContext(w, req)
-		handler(c)
-	} else {
-		w.WriteHeader(http.StatusNotFound)
-		fmt.Println(w, "404 NOT FOUND: %s\n", req.URL)
+	var middlewares []HandlerFunc
+	for _, group := range engine.groups {
+		if strings.HasPrefix(req.URL.Path, group.prefix) {
+			middlewares = append(middlewares, group.middlewares...)
+		}
 	}
+	c := newContext(w, req)
+	c.handlers = middlewares
+	engine.router.handle(c)
 }
