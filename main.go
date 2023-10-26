@@ -21,17 +21,16 @@ func onlyForV2() kit.HandlerFunc {
 
 func main() {
 	r := kit.New()
-	//r.Use(kit.Logger()) // global midlleware
-	r.GET("/", func(c *kit.Context) {
-		c.HTML(http.StatusOK, "<h1>Hello Gee</h1>")
-	})
-
-	v2 := r.Group("/v2")
-	v2.Use(onlyForV2()) // v2 group middleware
+	v1 := r.Group("")
+	v1.Use(kit.Recovery())
 	{
-		v2.GET("/hello/:name", func(c *kit.Context) {
-			// expect /hello/geektutu
-			c.String(http.StatusOK, "hello %s, you're at %s\n", c.Param("name"), c.Path)
+		v1.GET("/", func(c *kit.Context) {
+			c.String(http.StatusOK, "Hello Geektutu\n")
+		})
+		// index out of range for testing Recovery()
+		v1.GET("/panic", func(c *kit.Context) {
+			names := []string{"geektutu"}
+			c.String(http.StatusOK, names[100])
 		})
 	}
 

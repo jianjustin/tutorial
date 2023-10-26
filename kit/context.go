@@ -58,6 +58,11 @@ func (c *Context) Status(code int) {
 	c.Writer.WriteHeader(code)
 }
 
+func (c *Context) Fail(code int, err string) {
+	c.index = len(c.handlers)
+	c.JSON(code, H{"message": err})
+}
+
 func (c *Context) SetHeader(key string, value string) {
 	c.Writer.Header().Set(key, value)
 }
