@@ -12,4 +12,5 @@ use (
 	calculate-grpc-services/mul-service
 	calculate-grpc-services/sub_service
 	nats
+	opentelemetry/dice
 )

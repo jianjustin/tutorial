@@ -22,6 +22,7 @@ func TestCreateSubject(t *testing.T) {
 	if err := nc.Publish(subject, []byte("Hello NATS!")); err != nil {
 		log.Fatal(err)
 	}
+
 }
 
 func TestSubscribeSync(t *testing.T) {
