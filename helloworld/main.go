@@ -1,11 +1,14 @@
 package main
 
 import (
-	"helloworld/handler"
-	pb "helloworld/proto"
+	"github.com/jianjustin/helloworld/handler"
+	pb "github.com/jianjustin/helloworld/proto"
 
 	"go-micro.dev/v4"
 	"go-micro.dev/v4/logger"
+
+	grpcc "github.com/go-micro/plugins/v4/client/grpc"
+	grpcs "github.com/go-micro/plugins/v4/server/grpc"
 )
 
 var (
@@ -15,7 +18,10 @@ var (
 
 func main() {
 	// Create service
-	srv := micro.NewService()
+	srv := micro.NewService(
+		micro.Server(grpcs.NewServer()),
+		micro.Client(grpcc.NewClient()),
+	)
 	srv.Init(
 		micro.Name(service),
 		micro.Version(version),
