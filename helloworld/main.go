@@ -1,29 +1,32 @@
 package main
 
 import (
-	"context"
-	"go-micro.dev/v4"
+	"helloworld/handler"
 	pb "helloworld/proto"
-	"log"
+
+	"go-micro.dev/v4"
+	"go-micro.dev/v4/logger"
 )
 
-type Greeter struct{}
-
-func (g *Greeter) Hello(ctx context.Context, req *pb.Request, rsp *pb.Response) error {
-	rsp.Msg = "Hello " + req.Name
-	return nil
-}
+var (
+	service = "helloworld"
+	version = "latest"
+)
 
 func main() {
-	service := micro.NewService(
-		micro.Name("helloworld"),
+	// Create service
+	srv := micro.NewService()
+	srv.Init(
+		micro.Name(service),
+		micro.Version(version),
 	)
 
-	service.Init()
-
-	pb.RegisterGreeterHandler(service.Server(), new(Greeter))
-
-	if err := service.Run(); err != nil {
-		log.Fatal(err)
+	// Register handler
+	if err := pb.RegisterHelloworldHandler(srv.Server(), new(handler.Helloworld)); err != nil {
+		logger.Fatal(err)
+	}
+	// Run service
+	if err := srv.Run(); err != nil {
+		logger.Fatal(err)
 	}
 }
