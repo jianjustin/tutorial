@@ -2,7 +2,7 @@ FROM golang:alpine AS builder
 
 # Set Go env
 ENV CGO_ENABLED=0 GOOS=linux
-WORKDIR /go/src/helloworld
+WORKDIR /go/src/sub
 
 # Install dependencies
 RUN apk --update --no-cache add ca-certificates gcc libtool make musl-dev protoc git
@@ -17,6 +17,6 @@ RUN make proto tidy build
 FROM scratch
 
 COPY --from=builder /etc/ssl/certs /etc/ssl/certs
-COPY --from=builder /go/src/helloworld/helloworld /helloworld
-ENTRYPOINT ["/helloworld"]
+COPY --from=builder /go/src/sub/sub /sub
+ENTRYPOINT ["/sub"]
 CMD []

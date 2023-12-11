@@ -8,7 +8,7 @@ init:
 
 .PHONY: proto
 proto:
-	@protoc --proto_path=. --micro_out=. --go_out=:. proto/helloworld.proto
+	@protoc --proto_path=. --micro_out=. --go_out=:. proto/frontend.proto
 
 .PHONY: update
 update:
@@ -20,7 +20,7 @@ tidy:
 
 .PHONY: build
 build:
-	@go build -o helloworld *.go
+	@go build -o frontend *.go
 
 .PHONY: test
 test:
@@ -28,4 +28,4 @@ test:
 
 .PHONY: docker
 docker:
-	@docker build -t helloworld:latest .
+	@docker build -t frontend:latest .

@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/jianjustin/helloworld/handler"
-	pb "github.com/jianjustin/helloworld/proto"
+	"github.com/jianjustin/add/handler"
+	pb "github.com/jianjustin/add/proto"
 
 	"go-micro.dev/v4"
 	"go-micro.dev/v4/logger"
@@ -12,7 +12,7 @@ import (
 )
 
 var (
-	service = "helloworld"
+	service = "add"
 	version = "latest"
 )
 
@@ -28,7 +28,7 @@ func main() {
 	)
 
 	// Register handler
-	if err := pb.RegisterHelloworldHandler(srv.Server(), new(handler.Helloworld)); err != nil {
+	if err := pb.RegisterAddHandler(srv.Server(), new(handler.Add)); err != nil {
 		logger.Fatal(err)
 	}
 	// Run service

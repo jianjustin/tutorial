@@ -1,4 +1,4 @@
-module github.com/jianjustin/helloworld
+module github.com/jianjustin/add
 
 go 1.18
 
