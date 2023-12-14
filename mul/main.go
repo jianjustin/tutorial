@@ -1,8 +1,10 @@
 package main
 
 import (
+	"github.com/go-micro/plugins/v4/registry/etcd"
 	"github.com/jianjustin/mul/handler"
 	pb "github.com/jianjustin/mul/proto"
+	"go-micro.dev/v4/registry"
 
 	"go-micro.dev/v4"
 	"go-micro.dev/v4/logger"
@@ -12,15 +14,22 @@ import (
 )
 
 var (
-	service = "mul"
-	version = "latest"
+	service      = "mul"
+	version      = "latest"
+	etcd_address = "localhost:2379"
 )
 
 func main() {
+	//etcd registry
+	etcdRegistry := etcd.NewRegistry(
+		registry.Addrs(etcd_address),
+	)
+
 	// Create service
 	srv := micro.NewService(
 		micro.Server(grpcs.NewServer()),
 		micro.Client(grpcc.NewClient()),
+		micro.Registry(etcdRegistry),
 	)
 	srv.Init(
 		micro.Name(service),

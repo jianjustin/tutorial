@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	mgrpc "github.com/go-micro/plugins/v4/client/grpc"
+	"github.com/go-micro/plugins/v4/registry/etcd"
 	mhttp "github.com/go-micro/plugins/v4/server/http"
 	"github.com/gorilla/mux"
 	"github.com/jianjustin/frontend/config"
@@ -10,14 +11,16 @@ import (
 	pb "github.com/jianjustin/frontend/proto/mul"
 	"github.com/jianjustin/frontend/proto/sub"
 	"go-micro.dev/v4/logger"
+	"go-micro.dev/v4/registry"
 	"net/http"
 
 	"go-micro.dev/v4"
 )
 
 var (
-	service = "frontend"
-	version = "latest"
+	service      = "frontend"
+	version      = "latest"
+	etcd_address = "localhost:2379"
 )
 
 type frontendServer struct {
@@ -27,10 +30,16 @@ type frontendServer struct {
 }
 
 func main() {
+	//etcd registry
+	etcdRegistry := etcd.NewRegistry(
+		registry.Addrs(etcd_address),
+	)
+
 	// Create service
 	srv := micro.NewService(
 		micro.Client(mgrpc.NewClient()),
 		micro.Server(mhttp.NewServer()),
+		micro.Registry(etcdRegistry),
 	)
 	srv.Init(
 		micro.Name(service),
@@ -54,7 +63,6 @@ func main() {
 		logger.Fatal(err)
 	}
 
-	logger.Infof("starting server on %s")
 	if err := srv.Run(); err != nil {
 		logger.Fatal(err)
 	}
