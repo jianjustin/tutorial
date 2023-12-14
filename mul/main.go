@@ -5,6 +5,7 @@ import (
 	"github.com/jianjustin/mul/handler"
 	pb "github.com/jianjustin/mul/proto"
 	"go-micro.dev/v4/registry"
+	"go-micro.dev/v4/server"
 
 	"go-micro.dev/v4"
 	"go-micro.dev/v4/logger"
@@ -17,6 +18,7 @@ var (
 	service      = "mul"
 	version      = "latest"
 	etcd_address = "localhost:2379"
+	address      = ":60001"
 )
 
 func main() {
@@ -27,7 +29,7 @@ func main() {
 
 	// Create service
 	srv := micro.NewService(
-		micro.Server(grpcs.NewServer()),
+		micro.Server(grpcs.NewServer(server.Address(address))),
 		micro.Client(grpcc.NewClient()),
 		micro.Registry(etcdRegistry),
 	)

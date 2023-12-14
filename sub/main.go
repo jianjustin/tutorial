@@ -3,8 +3,10 @@ package main
 import (
 	"github.com/go-micro/plugins/v4/registry/etcd"
 	"github.com/jianjustin/sub/handler"
-	pb "github.com/jianjustin/sub/proto"
+	"github.com/jianjustin/sub/proto/mul"
+	pb "github.com/jianjustin/sub/proto/sub"
 	"go-micro.dev/v4/registry"
+	"go-micro.dev/v4/server"
 
 	"go-micro.dev/v4"
 	"go-micro.dev/v4/logger"
@@ -17,6 +19,7 @@ var (
 	service      = "sub"
 	version      = "latest"
 	etcd_address = "localhost:2379"
+	address      = ":60002"
 )
 
 func main() {
@@ -27,14 +30,18 @@ func main() {
 
 	// Create service
 	srv := micro.NewService(
-		micro.Server(grpcs.NewServer()),
+		micro.Server(grpcs.NewServer(server.Address(address))),
 		micro.Client(grpcc.NewClient()),
 		micro.Registry(etcdRegistry),
 	)
+
 	srv.Init(
 		micro.Name(service),
 		micro.Version(version),
 	)
+
+	// Initialise  mul service
+	handler.MulClient = mul.NewMulService("mul", srv.Client())
 
 	// Register handler
 	if err := pb.RegisterSubHandler(srv.Server(), new(handler.Sub)); err != nil {
