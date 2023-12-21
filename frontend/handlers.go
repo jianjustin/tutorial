@@ -1,38 +1,53 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
-	"github.com/gorilla/mux"
 	"github.com/jianjustin/frontend/proto/add"
 	pb "github.com/jianjustin/frontend/proto/mul"
 	"github.com/jianjustin/frontend/proto/sub"
 	"net/http"
-	"strconv"
 )
 
+type requestBody struct {
+	A int64 `json:"a"`
+	B int64 `json:"b"`
+}
+
 func (fe *frontendServer) AddHandler(w http.ResponseWriter, r *http.Request) {
-	a, b := int64(0), int64(0)
-	a, _ = strconv.ParseInt(mux.Vars(r)["a"], 10, 64)
-	b, _ = strconv.ParseInt(mux.Vars(r)["b"], 10, 64)
-	result, _ := fe.addService.Add(r.Context(), &add.AddRequest{A: a, B: b})
+	var body requestBody
+	err := json.NewDecoder(r.Body).Decode(&body)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+	result, _ := fe.addService.Add(r.Context(), &add.AddRequest{A: body.A, B: body.B})
 
 	fmt.Fprint(w, result.GetResult())
 }
 
 func (fe *frontendServer) MulHandler(w http.ResponseWriter, r *http.Request) {
-	a, b := int64(0), int64(0)
-	a, _ = strconv.ParseInt(mux.Vars(r)["a"], 10, 64)
-	b, _ = strconv.ParseInt(mux.Vars(r)["b"], 10, 64)
-	result, _ := fe.mulService.Mul(r.Context(), &pb.MulRequest{A: a, B: b})
+	var body requestBody
+	err := json.NewDecoder(r.Body).Decode(&body)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	result, _ := fe.mulService.Mul(r.Context(), &pb.MulRequest{A: body.A, B: body.B})
 
 	fmt.Fprint(w, result.GetResult())
 }
 
 func (fe *frontendServer) SubHandler(w http.ResponseWriter, r *http.Request) {
-	a, b := int64(0), int64(0)
-	a, _ = strconv.ParseInt(mux.Vars(r)["a"], 10, 64)
-	b, _ = strconv.ParseInt(mux.Vars(r)["b"], 10, 64)
-	result, _ := fe.subService.Sub(r.Context(), &sub.SubRequest{A: a, B: b})
+	var body requestBody
+	err := json.NewDecoder(r.Body).Decode(&body)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	result, _ := fe.subService.Sub(r.Context(), &sub.SubRequest{A: body.A, B: body.B})
 
 	fmt.Fprint(w, result.GetResult())
 }
