@@ -18,5 +18,6 @@ FROM scratch
 
 COPY --from=builder /etc/ssl/certs /etc/ssl/certs
 COPY --from=builder /go/src/frontend/frontend /frontend
+EXPOSE 8090
 ENTRYPOINT ["/frontend"]
 CMD []

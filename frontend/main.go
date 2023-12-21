@@ -20,7 +20,7 @@ import (
 var (
 	service      = "frontend"
 	version      = "latest"
-	etcd_address = "localhost:2379"
+	etcd_address = "etcd-service:2379"
 )
 
 type frontendServer struct {

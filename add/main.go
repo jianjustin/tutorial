@@ -17,7 +17,7 @@ import (
 var (
 	service      = "add"
 	version      = "latest"
-	etcd_address = "localhost:2379"
+	etcd_address = "etcd-service:2379"
 	address      = ":60003"
 )
 

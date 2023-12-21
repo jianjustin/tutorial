@@ -18,5 +18,6 @@ FROM scratch
 
 COPY --from=builder /etc/ssl/certs /etc/ssl/certs
 COPY --from=builder /go/src/sub/sub /sub
+EXPOSE 60002
 ENTRYPOINT ["/sub"]
 CMD []

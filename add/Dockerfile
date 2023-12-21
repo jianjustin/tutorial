@@ -18,5 +18,6 @@ FROM scratch
 
 COPY --from=builder /etc/ssl/certs /etc/ssl/certs
 COPY --from=builder /go/src/add/add /add
+EXPOSE 60003
 ENTRYPOINT ["/add"]
 CMD []
