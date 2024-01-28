@@ -51,6 +51,7 @@ func main() {
 	r.HandleFunc("/add", svc.AddHandler).Methods(http.MethodPost, http.MethodHead)
 	r.HandleFunc("/mul", svc.MulHandler).Methods(http.MethodPost, http.MethodHead)
 	r.HandleFunc("/sub", svc.SubHandler).Methods(http.MethodPost, http.MethodHead)
+	r.HandleFunc("/hello", svc.HelloHandler).Methods(http.MethodGet, http.MethodHead)
 	r.HandleFunc("/", func(w http.ResponseWriter, _ *http.Request) { fmt.Fprint(w, "ok") })
 
 	var handler http.Handler = r

@@ -9,6 +9,7 @@ require (
 	github.com/gorilla/mux v1.8.1
 	go-micro.dev/v4 v4.10.2
 	google.golang.org/protobuf v1.31.0
+	github.com/lib/pq v1.10.9
 )
 
 require (
@@ -37,6 +38,7 @@ require (
 	github.com/imdario/mergo v0.3.16 // indirect
 	github.com/jbenet/go-context v0.0.0-20150711004518-d14ea06fba99 // indirect
 	github.com/kevinburke/ssh_config v1.2.0 // indirect
+	github.com/lib/pq v1.10.9 // indirect
 	github.com/miekg/dns v1.1.57 // indirect
 	github.com/nxadm/tail v1.4.11 // indirect
 	github.com/oxtoacart/bpool v0.0.0-20190530202638-03653db5a59c // indirect
