@@ -28,4 +28,4 @@ test:
 
 .PHONY: docker
 docker:
-	@docker build -t add:latest .
+	@docker build -t jianjustin/add:latest .

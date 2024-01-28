@@ -28,4 +28,4 @@ test:
 
 .PHONY: docker
 docker:
-	@docker build -t mul:latest .
+	@docker build -t jianjustin/mul:latest .

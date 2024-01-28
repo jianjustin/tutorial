@@ -29,4 +29,4 @@ test:
 
 .PHONY: docker
 docker:
-	@docker build -t sub:latest .
+	@docker build -t jianjustin/sub:latest .

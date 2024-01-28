@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: sub-deployment
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       app: sub
@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: sub
-          image: sub:latest
+          image: jianjustin/sub:latest
           ports:
             - containerPort: 60002
 ---
@@ -23,6 +23,7 @@ kind: Service
 metadata:
   name: sub-service
 spec:
+  type: ClusterIP
   selector:
     app: sub
   ports:

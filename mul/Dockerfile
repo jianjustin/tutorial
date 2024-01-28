@@ -17,7 +17,7 @@ RUN make proto tidy build
 FROM scratch
 
 COPY --from=builder /etc/ssl/certs /etc/ssl/certs
-COPY --from=builder /go/src/mul /mul
+COPY --from=builder /go/src/mul/mul /mul
 EXPOSE 60001
 ENTRYPOINT ["/mul"]
 CMD []

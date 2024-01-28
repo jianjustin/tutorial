@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: add-deployment
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       app: add
@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: add
-          image: add:latest
+          image: jianjustin/add:latest
           ports:
             - containerPort: 60003
 ---
@@ -23,6 +23,7 @@ kind: Service
 metadata:
   name: add-service
 spec:
+  type: ClusterIP
   selector:
     app: add
   ports:

@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: mul-deployment
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       app: mul
@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: mul
-          image: mul:latest
+          image: jianjustin/mul:latest
           ports:
             - containerPort: 60001
 ---
@@ -23,6 +23,7 @@ kind: Service
 metadata:
   name: mul-service
 spec:
+  type: ClusterIP
   selector:
     app: mul
   ports:

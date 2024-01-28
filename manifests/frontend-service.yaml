@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: frontend-deployment
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       app: frontend
@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: frontend:latest
+          image: jianjustin/frontend:latest
           ports:
             - containerPort: 8090
 ---
@@ -23,6 +23,7 @@ kind: Service
 metadata:
   name: frontend-service
 spec:
+  type: ClusterIP
   selector:
     app: frontend
   ports:

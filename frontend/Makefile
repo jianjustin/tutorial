@@ -30,4 +30,4 @@ test:
 
 .PHONY: docker
 docker:
-	@docker build -t frontend:latest .
+	@docker build -t jianjustin/frontend:latest .
