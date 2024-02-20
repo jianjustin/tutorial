@@ -12,6 +12,7 @@ spec:
       labels:
         app: frontend
     spec:
+      serviceAccountName: go-micro-service-account
       containers:
         - name: frontend
           image: jianjustin/frontend:latest
