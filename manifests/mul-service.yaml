@@ -17,6 +17,9 @@ spec:
           image: jianjustin/mul:latest
           ports:
             - containerPort: 60001
+          env:
+            - name: MICRO_REGISTRY
+              value: "kubernetes"
 ---
 apiVersion: v1
 kind: Service

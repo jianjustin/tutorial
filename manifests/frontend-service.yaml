@@ -17,6 +17,9 @@ spec:
           image: jianjustin/frontend:latest
           ports:
             - containerPort: 8090
+          env:
+            - name: MICRO_REGISTRY
+              value: "kubernetes"
 ---
 apiVersion: v1
 kind: Service
