@@ -12,6 +12,7 @@ spec:
       labels:
         app: add
     spec:
+      serviceAccountName: go-micro-service-account
       containers:
         - name: add
           image: jianjustin/add:latest
