@@ -12,7 +12,6 @@ spec:
       labels:
         app: sub
     spec:
-      serviceAccountName: go-micro-service-account
       containers:
         - name: sub
           image: jianjustin/sub:latest

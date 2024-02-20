@@ -12,7 +12,6 @@ spec:
       labels:
         app: mul
     spec:
-      serviceAccountName: go-micro-service-account
       containers:
         - name: mul
           image: jianjustin/mul:latest
