@@ -20,7 +20,7 @@ func (e *eventNotifer) Register(obs EventObserver) {
 
 func (e *eventNotifer) Deregister(obs EventObserver) {
 	for i := 0; i < len(e.observers); i++ {
-		if obs == e.observers[i] {
+		if obs.GetName() != e.observers[i].GetName() {
 			e.observers = append(e.observers[:i], e.observers[i+1:]...)
 		}
 	}
