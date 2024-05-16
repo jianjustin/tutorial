@@ -1,16 +1,17 @@
-go 1.20
+go 1.21.5
 
 use (
-	grpc
-	microservices-app
-	tutorial
-	patterns
-	kit
-	calculate-micro-services/add-service
-	calculate-micro-services/mul-service
 	calculate-grpc-services/add-service
 	calculate-grpc-services/mul-service
 	calculate-grpc-services/sub_service
+	calculate-micro-services/add-service
+	calculate-micro-services/mul-service
+	grpc
+	kit
+	microservices-app
 	nats
 	opentelemetry/dice
+	patterns
+	tutorial
+	asynq
 )
