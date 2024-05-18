@@ -19,3 +19,5 @@ modules.xml
 vcs.xml
 
 .history
+*.wal
+*.tmp
