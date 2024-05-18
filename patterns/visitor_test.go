@@ -1,9 +1,8 @@
-package visitor_test
+package patterns_test
 
 import (
+	visitor2 "go.guide/patterns"
 	"testing"
-
-	visitor2 "go.guide/patterns/visitor"
 )
 
 func TestVisitor(t *testing.T) {

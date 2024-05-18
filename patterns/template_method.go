@@ -1,4 +1,4 @@
-package templatemethod
+package patterns
 
 import "fmt"
 

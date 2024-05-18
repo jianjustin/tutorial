@@ -1,4 +1,4 @@
-package visitor
+package patterns
 
 import "fmt"
 

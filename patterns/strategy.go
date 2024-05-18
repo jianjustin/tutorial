@@ -1,4 +1,4 @@
-package strategy
+package patterns
 
 import "fmt"
 
@@ -36,21 +36,21 @@ func (s *strategyB) Execute() {
 }
 
 // Context defines a context for executing a strategy.
-type Context struct {
+type StrategyContext struct {
 	S Strategy
 }
 
 // NewContext creates a new instance of a context.
-func NewContext() *Context {
-	return &Context{}
+func NewContext() *StrategyContext {
+	return &StrategyContext{}
 }
 
 // SetStrategy sets the strategy to execute for this context.
-func (c *Context) SetStrategy(strategy Strategy) {
+func (c *StrategyContext) SetStrategy(strategy Strategy) {
 	c.S = strategy
 }
 
 // Execute executes the strategy.
-func (c *Context) Execute() {
+func (c *StrategyContext) Execute() {
 	c.S.Execute()
 }

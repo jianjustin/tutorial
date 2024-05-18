@@ -1,9 +1,8 @@
-package templatemethod_test
+package patterns_test
 
 import (
+	templatemethod "go.guide/patterns"
 	"testing"
-
-	templatemethod "go.guide/patterns/template_method"
 )
 
 func TestTemplateMethod(t *testing.T) {

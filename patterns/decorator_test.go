@@ -1,16 +1,15 @@
-package decorator_test
+package patterns_test
 
 import (
+	"go.guide/patterns"
 	"log"
 	"testing"
-
-	"go.guide/patterns/decorator"
 )
 
 func TestLogDecorate(t *testing.T) {
 	t.Parallel()
 
-	decorator := decorator.LogDecorate(func(taskID int) int {
+	decorator := patterns.LogDecorate(func(taskID int) int {
 		log.Printf("Task with ID %v is running....", taskID)
 		return 0
 	})

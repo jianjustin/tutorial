@@ -1,6 +1,8 @@
-package chain
+package patterns
 
-import "testing"
+import (
+	"testing"
+)
 
 func TestHandle_SecondHanlderHandlesRequest(t *testing.T) {
 	t.Parallel()

@@ -1,4 +1,4 @@
-package command
+package patterns
 
 import "fmt"
 
@@ -48,15 +48,4 @@ func (s *Switch) On() {
 
 func (s *Switch) Off() {
 	s.OffCommand.Execute()
-}
-
-func main() {
-	light := &Light{}
-	switcher := &Switch{
-		OnCommand:  &LightOnCommand{light: light},
-		OffCommand: &LightOffCommand{light: light},
-	}
-
-	switcher.On()
-	switcher.Off()
 }

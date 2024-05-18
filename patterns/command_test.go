@@ -1,4 +1,4 @@
-package command
+package patterns
 
 import "testing"
 

@@ -1,9 +1,8 @@
-package statenew_test
+package patterns_test
 
 import (
+	statenew "go.guide/patterns"
 	"testing"
-
-	statenew "go.guide/patterns/state_new"
 )
 
 func TestState(t *testing.T) {
