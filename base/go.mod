@@ -1,4 +1,4 @@
-module go.guide/tutorial
+module go.guide/base
 
 go 1.18
 
