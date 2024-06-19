@@ -15,4 +15,5 @@ use (
 	base
 	asynq
 	raftexample
+	statemachine
 )

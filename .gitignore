@@ -21,3 +21,4 @@ vcs.xml
 .history
 *.wal
 *.tmp
+*.Sum
