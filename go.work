@@ -1,19 +1,18 @@
 go 1.21.5
 
 use (
-	calculate-grpc-services/add-service
-	calculate-grpc-services/mul-service
-	calculate-grpc-services/sub_service
-	calculate-micro-services/add-service
-	calculate-micro-services/mul-service
+	apps/calculate-grpc-services/add-service
+	apps/calculate-grpc-services/mul-service
+	apps/calculate-grpc-services/sub_service
+	apps/calculate-micro-services/add-service
+	apps/calculate-micro-services/mul-service
 	grpc
-	kit
-	microservices-app
-	nats
-	opentelemetry/dice
 	patterns
 	base
-	asynq
-	raftexample
-	statemachine
+	demos/asynq
+	demos/raftexample
+	demos/statemachine
+	demos/kit
+    demos/nats
+    demos/opentelemetry/dice
 )
