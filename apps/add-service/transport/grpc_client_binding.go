@@ -1,4 +1,4 @@
-package transportgrpc
+package transport
 
 import (
 	"context"
@@ -6,7 +6,6 @@ import (
 	grpctransport "github.com/go-kit/kit/transport/grpc"
 	"go.guide/add-grpc-service/pb"
 	"go.guide/add-grpc-service/service"
-	"go.guide/add-grpc-service/transport"
 	"google.golang.org/grpc"
 )
 
@@ -15,20 +14,20 @@ type AddClientBinding struct {
 }
 
 func (s *AddClientBinding) Add(ctx context.Context, a int64) (context.Context, int64, error) {
-	response, err := s.E(ctx, &transport.AddRequest{A: a})
+	response, err := s.E(ctx, &AddRequest{A: a})
 	if err != nil {
 		return ctx, 0, err
 	}
-	r := response.(*transport.AddResponse)
+	r := response.(*AddResponse)
 	return ctx, r.V, nil
 }
 
 func (s *AddClientBinding) AddAfterMul(ctx context.Context, a int64) (context.Context, int64, error) {
-	response, err := s.E(ctx, &transport.AddRequest{A: a})
+	response, err := s.E(ctx, &AddRequest{A: a})
 	if err != nil {
 		return ctx, 0, err
 	}
-	r := response.(*transport.AddResponse)
+	r := response.(*AddResponse)
 	return ctx, r.V, nil
 }
 

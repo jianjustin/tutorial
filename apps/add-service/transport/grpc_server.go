@@ -1,4 +1,4 @@
-package transportgrpc
+package transport
 
 import (
 	"context"
@@ -7,7 +7,6 @@ import (
 	"github.com/go-kit/log"
 	opentracinggo "github.com/opentracing/opentracing-go"
 	"go.guide/add-grpc-service/pb"
-	"go.guide/add-grpc-service/transport"
 )
 
 type addServiceServer struct {
@@ -32,19 +31,19 @@ func (a addServiceServer) AddAfterMul(ctx context.Context, request *pb.AddReques
 	return resp.(*pb.AddResponse), nil
 }
 
-func NewGRPCServer(endpoints *transport.EndpointsSet, logger log.Logger, tracer opentracinggo.Tracer, opts ...grpc.ServerOption) pb.AddServiceServer {
+func NewGRPCServer(endpoints *EndpointsSet, logger log.Logger, tracer opentracinggo.Tracer, opts ...grpc.ServerOption) pb.AddServiceServer {
 	return &addServiceServer{
 		add: grpc.NewServer(
 			endpoints.AddEndpoint,
-			_Decode_Add_Request,
-			_Encode_Add_Response,
+			_Decode_Grpc_Add_Request,
+			_Encode_Grpc_Add_Response,
 			append(opts, grpc.ServerBefore(
 				opentracing.GRPCToContext(tracer, "add", logger)))...,
 		),
 		addAfterMul: grpc.NewServer(
 			endpoints.AddAfterMulEndpoint,
-			_Decode_Add_Request,
-			_Encode_Add_Response,
+			_Decode_Grpc_Add_Request,
+			_Encode_Grpc_Add_Response,
 			append(opts, grpc.ServerBefore(
 				opentracing.GRPCToContext(tracer, "addAfterMul", logger)))...,
 		),

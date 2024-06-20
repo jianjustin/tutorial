@@ -1,10 +1,9 @@
-package transporthttp
+package transport
 
 import (
 	"bytes"
 	"context"
 	"encoding/json"
-	"go.guide/add-grpc-service/transport"
 	"io/ioutil"
 	"net/http"
 	"path"
@@ -25,13 +24,13 @@ func CommonHTTPResponseEncoder(_ context.Context, w http.ResponseWriter, respons
 }
 
 func _Decode_Add_Request(_ context.Context, r *http.Request) (interface{}, error) {
-	var req transport.AddRequest
+	var req AddRequest
 	err := json.NewDecoder(r.Body).Decode(&req)
 	return &req, err
 }
 
 func _Decode_Add_Response(_ context.Context, r *http.Response) (interface{}, error) {
-	var resp transport.AddResponse
+	var resp AddResponse
 	err := json.NewDecoder(r.Body).Decode(&resp)
 	return &resp, err
 }

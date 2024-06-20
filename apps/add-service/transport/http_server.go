@@ -1,4 +1,4 @@
-package transporthttp
+package transport
 
 import (
 	"github.com/go-kit/kit/tracing/opentracing"
@@ -6,11 +6,10 @@ import (
 	"github.com/go-kit/log"
 	"github.com/gorilla/mux"
 	opentracinggo "github.com/opentracing/opentracing-go"
-	"go.guide/add-grpc-service/transport"
 	http1 "net/http"
 )
 
-func NewHTTPHandler(endpoints *transport.EndpointsSet, logger log.Logger, tracer opentracinggo.Tracer, opts ...http.ServerOption) http1.Handler {
+func NewHTTPHandler(endpoints *EndpointsSet, logger log.Logger, tracer opentracinggo.Tracer, opts ...http.ServerOption) http1.Handler {
 	mux := mux.NewRouter()
 	mux.Methods("POST").Path("/add").Handler(
 		http.NewServer(
