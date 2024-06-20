@@ -1,0 +1,16 @@
+syntax = "proto3";
+option go_package = "./;pb";
+package pb;
+
+service AddService {
+  rpc Add (AddRequest) returns (AddResponse) {}
+  rpc AddAfterMul(AddRequest) returns (AddResponse) {}
+}
+
+message AddRequest {
+  int64 a = 1;
+}
+
+message AddResponse {
+  int64 v = 1;
+}

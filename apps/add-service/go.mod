@@ -2,8 +2,6 @@ module go.guide/add-grpc-service
 
 go 1.21
 
-toolchain go1.21.5
-
 require (
 	github.com/go-kit/kit v0.13.0
 	github.com/go-kit/log v0.2.1

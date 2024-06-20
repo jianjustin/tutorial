@@ -125,12 +125,12 @@ func EtcdRegisterAddServiceMiddleware(logger log.Logger) service.AddServiceMiddl
 	return func(next service.AddService) service.AddService {
 		r := middleware.GetEtcdRegister()
 		if r == nil {
-			log.With(logger, "level", "error").Log("msg", "get register client failed")
+			level.Error(logger).Log("msg", "get register client failed")
 			return next
 		}
 		err := r.Register(etcdv3.Service{Key: middleware.ServiceKey, Value: fmt.Sprintf("127.0.0.1:%d", *port)})
 		if err != nil {
-			log.With(logger, "level", "error").Log("msg", "register service failed")
+			level.Error(logger).Log("msg", "register service failed")
 			return next
 		}
 

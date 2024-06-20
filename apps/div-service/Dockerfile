@@ -10,7 +10,7 @@ RUN go mod download
 COPY *.go ./
 RUN GOOS=linux go build -o /main
 
-EXPOSE 50051
-EXPOSE 8080
+EXPOSE 50054
+EXPOSE 8084
 
 CMD ["/main"]

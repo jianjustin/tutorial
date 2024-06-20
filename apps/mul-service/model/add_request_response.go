@@ -2,7 +2,7 @@ package model
 
 import (
 	"context"
-	"go.guide/add-grpc-service/pb"
+	"go.guide/mul-grpc-service/pb"
 )
 
 type AddRequest struct {

@@ -1,8 +1,7 @@
-package middleware
+package proxying
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"github.com/go-kit/kit/circuitbreaker"
 	"github.com/go-kit/kit/endpoint"
@@ -12,9 +11,8 @@ import (
 	grpctransport "github.com/go-kit/kit/transport/grpc"
 	"github.com/go-kit/log"
 	"github.com/sony/gobreaker"
-	"go.guide/mul-grpc-service/model"
-	"go.guide/mul-grpc-service/pb"
-	"go.guide/mul-grpc-service/service"
+	"go.guide/div-grpc-service/pb"
+	"go.guide/div-grpc-service/service"
 	"golang.org/x/time/rate"
 	"google.golang.org/grpc"
 	"time"
@@ -91,39 +89,8 @@ func makeAddServiceProxy(ctx context.Context, instance string) endpoint.Endpoint
 		cc,
 		"pb.AddService",
 		"Add",
-		model.EncodeAddRequest,
-		model.EmptyResponse,
+		_Encode_Grpc_Add_Request,
+		_Decode_Grpc_Add_Response,
 		&pb.AddResponse{},
 	).Endpoint()
-}
-
-type AddServiceProxy struct {
-	ctx context.Context
-	E   endpoint.Endpoint
-}
-
-func (proxy AddServiceProxy) Add(ctx context.Context, a int64) (context.Context, int64, error) {
-	response, err := proxy.E(proxy.ctx, model.AddRequest{A: a})
-	if err != nil {
-		return ctx, 0, err
-	}
-
-	str, _ := json.Marshal(response)
-
-	resp := &model.AddResponse{}
-	err = json.Unmarshal(str, resp)
-	return ctx, resp.V, nil
-}
-
-func (proxy AddServiceProxy) AddAfterMul(ctx context.Context, a int64) (context.Context, int64, error) {
-	response, err := proxy.E(proxy.ctx, model.AddRequest{A: a})
-	if err != nil {
-		return ctx, 0, err
-	}
-
-	str, _ := json.Marshal(response)
-
-	resp := &model.AddResponse{}
-	err = json.Unmarshal(str, resp)
-	return ctx, resp.V, nil
 }

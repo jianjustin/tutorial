@@ -19,7 +19,8 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	DivService_Div_FullMethodName = "/pb.DivService/Div"
+	DivService_Div_FullMethodName         = "/pb.DivService/Div"
+	DivService_DivAfterAdd_FullMethodName = "/pb.DivService/DivAfterAdd"
 )
 
 // DivServiceClient is the client API for DivService service.
@@ -27,6 +28,7 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type DivServiceClient interface {
 	Div(ctx context.Context, in *DivRequest, opts ...grpc.CallOption) (*DivResponse, error)
+	DivAfterAdd(ctx context.Context, in *DivRequest, opts ...grpc.CallOption) (*DivResponse, error)
 }
 
 type divServiceClient struct {
@@ -46,11 +48,21 @@ func (c *divServiceClient) Div(ctx context.Context, in *DivRequest, opts ...grpc
 	return out, nil
 }
 
+func (c *divServiceClient) DivAfterAdd(ctx context.Context, in *DivRequest, opts ...grpc.CallOption) (*DivResponse, error) {
+	out := new(DivResponse)
+	err := c.cc.Invoke(ctx, DivService_DivAfterAdd_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // DivServiceServer is the server API for DivService service.
 // All implementations should embed UnimplementedDivServiceServer
 // for forward compatibility
 type DivServiceServer interface {
 	Div(context.Context, *DivRequest) (*DivResponse, error)
+	DivAfterAdd(context.Context, *DivRequest) (*DivResponse, error)
 }
 
 // UnimplementedDivServiceServer should be embedded to have forward compatible implementations.
@@ -59,6 +71,9 @@ type UnimplementedDivServiceServer struct {
 
 func (UnimplementedDivServiceServer) Div(context.Context, *DivRequest) (*DivResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Div not implemented")
+}
+func (UnimplementedDivServiceServer) DivAfterAdd(context.Context, *DivRequest) (*DivResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DivAfterAdd not implemented")
 }
 
 // UnsafeDivServiceServer may be embedded to opt out of forward compatibility for this service.
@@ -90,6 +105,24 @@ func _DivService_Div_Handler(srv interface{}, ctx context.Context, dec func(inte
 	return interceptor(ctx, in, info, handler)
 }
 
+func _DivService_DivAfterAdd_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DivRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DivServiceServer).DivAfterAdd(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: DivService_DivAfterAdd_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DivServiceServer).DivAfterAdd(ctx, req.(*DivRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // DivService_ServiceDesc is the grpc.ServiceDesc for DivService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -100,6 +133,10 @@ var DivService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Div",
 			Handler:    _DivService_Div_Handler,
+		},
+		{
+			MethodName: "DivAfterAdd",
+			Handler:    _DivService_DivAfterAdd_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
