@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: add-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: add-deployment
+  template:
+    metadata:
+      labels:
+        app: add-deployment
+    spec:
+      containers:
+        - name: add-service
+          image: jianjustin/add-service:latest
+          ports:
+            - containerPort: 50051 # gRPC Port
+            - containerPort: 8080 # HTTP Port

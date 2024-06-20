@@ -1,13 +1,10 @@
 go 1.21.5
 
 use (
-	apps/calculate-grpc-services/add-service
-	apps/calculate-grpc-services/mul-service
-	apps/calculate-grpc-services/sub_service
-	apps/calculate-micro-services/add-service
-	apps/calculate-micro-services/mul-service
-	apps/a-service
-	grpc
+	apps/add-service
+	apps/mul-service
+	apps/sub_service
+
 	patterns
 	base
 	demos/asynq
@@ -16,4 +13,5 @@ use (
 	demos/kit
     demos/nats
     demos/opentelemetry/dice
+    demos/grpc
 )
