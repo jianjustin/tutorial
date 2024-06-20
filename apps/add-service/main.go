@@ -36,7 +36,7 @@ func main() {
 	})
 
 	svc := service.NewAddService()
-	svc = middleware.LoggingAddServiceMiddleware(logger)(svc)
+	svc = service.LoggingAddServiceMiddleware(logger)(svc)
 	svc = EtcdRegisterAddServiceMiddleware(logger)(svc)
 	endpoints := transport.Endpoints(svc)
 

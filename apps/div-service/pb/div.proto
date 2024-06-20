@@ -1,0 +1,15 @@
+syntax = "proto3";
+option go_package = "./;pb";
+package pb;
+
+service DivService {
+  rpc Div (DivRequest) returns (DivResponse) {}
+}
+
+message DivRequest {
+  int64 a = 1;
+}
+
+message DivResponse {
+  int64 v = 1;
+}

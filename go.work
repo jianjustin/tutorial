@@ -3,7 +3,8 @@ go 1.21.5
 use (
 	apps/add-service
 	apps/mul-service
-	apps/sub_service
+	apps/sub-service
+	apps/div-service
 
 	patterns
 	base
