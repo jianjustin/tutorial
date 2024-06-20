@@ -6,6 +6,7 @@ use (
 	apps/calculate-grpc-services/sub_service
 	apps/calculate-micro-services/add-service
 	apps/calculate-micro-services/mul-service
+	apps/a-service
 	grpc
 	patterns
 	base
