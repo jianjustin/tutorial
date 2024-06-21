@@ -17,4 +17,3 @@ spec:
           image: jianjustin/add-service:latest
           ports:
             - containerPort: 50051 # gRPC Port
-            - containerPort: 8080 # HTTP Port

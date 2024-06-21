@@ -11,6 +11,5 @@ COPY *.go ./
 RUN GOOS=linux go build -o /main
 
 EXPOSE 50051
-EXPOSE 8080
 
 CMD ["/main"]
