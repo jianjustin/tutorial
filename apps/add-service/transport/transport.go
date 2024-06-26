@@ -14,20 +14,11 @@ import (
 
 type addServiceServer struct {
 	pb.UnimplementedAddServiceServer
-	add         grpc.Handler
-	addAfterMul grpc.Handler
+	add grpc.Handler
 }
 
 func (a addServiceServer) Add(ctx context.Context, request *pb.AddRequest) (*pb.AddResponse, error) {
 	_, resp, err := a.add.ServeGRPC(ctx, request)
-	if err != nil {
-		return nil, err
-	}
-	return resp.(*pb.AddResponse), nil
-}
-
-func (a addServiceServer) AddAfterMul(ctx context.Context, request *pb.AddRequest) (*pb.AddResponse, error) {
-	_, resp, err := a.addAfterMul.ServeGRPC(ctx, request)
 	if err != nil {
 		return nil, err
 	}
@@ -43,13 +34,6 @@ func NewGRPCServer(endpoints *EndpointsSet, logger log.Logger, tracer opentracin
 			append(opts, grpc.ServerBefore(
 				opentracing.GRPCToContext(tracer, "add", logger)))...,
 		),
-		addAfterMul: grpc.NewServer(
-			endpoints.AddAfterMulEndpoint,
-			_Decode_Grpc_Add_Request,
-			_Encode_Grpc_Add_Response,
-			append(opts, grpc.ServerBefore(
-				opentracing.GRPCToContext(tracer, "addAfterMul", logger)))...,
-		),
 	}
 }
 
@@ -62,12 +46,5 @@ func NewHTTPHandler(endpoints *EndpointsSet, logger log.Logger, tracer opentraci
 			_Encode_Http_Add_Response,
 			append(opts, http.ServerBefore(
 				opentracing.HTTPToContext(tracer, "add", logger)))...))
-	mux.Methods("POST").Path("/addAfterMul").Handler(
-		http.NewServer(
-			endpoints.AddAfterMulEndpoint,
-			_Decode_Http_Add_Request,
-			_Encode_Http_Add_Response,
-			append(opts, http.ServerBefore(
-				opentracing.HTTPToContext(tracer, "addAfterMul", logger)))...))
 	return mux
 }

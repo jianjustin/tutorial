@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-const ServiceKey string = "/services/core/"
+const ServiceKey string = "/services/sub/"
 
 func GetEtcdRegister() etcdv3.Client {
 	client, _ := etcdv3.NewClient(

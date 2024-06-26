@@ -24,7 +24,7 @@ import (
 
 var (
 	port    = flag.Int("port", 50051, "The server port")
-	restful = flag.Int("restful", 8080, "the port to restful serve on")
+	restful = flag.Int("restful", 8081, "the port to restful serve on")
 )
 
 func main() {

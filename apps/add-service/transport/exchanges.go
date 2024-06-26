@@ -35,11 +35,6 @@ func _Encode_Http_Add_Request(ctx context.Context, r *http.Request, request inte
 	return CommonHTTPRequestEncoder(ctx, r, request)
 }
 
-func _Encode_Http_AddAfterMul_Request(ctx context.Context, r *http.Request, request interface{}) error {
-	r.URL.Path = path.Join(r.URL.Path, "addAfterMul")
-	return CommonHTTPRequestEncoder(ctx, r, request)
-}
-
 func _Encode_Http_Add_Response(ctx context.Context, w http.ResponseWriter, response interface{}) error {
 	return CommonHTTPResponseEncoder(ctx, w, response)
 }

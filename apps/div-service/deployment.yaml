@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: div-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: div-deployment
+  template:
+    metadata:
+      labels:
+        app: div-deployment
+    spec:
+      containers:
+        - name: div-service
+          image: jianjustin/div-service:latest
+          ports:
+            - containerPort: 50054 # gRPC Port
+            - containerPort: 8084 # HTTP Port

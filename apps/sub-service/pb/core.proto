@@ -1,0 +1,15 @@
+syntax = "proto3";
+option go_package = "./;pb";
+package pb;
+
+service CoreService {
+  rpc Random (RandomRequest) returns (RandomResponse) {}
+}
+
+message RandomRequest {
+  int64 a = 1;
+}
+
+message RandomResponse {
+  int64 v = 1;
+}

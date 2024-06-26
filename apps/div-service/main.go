@@ -16,6 +16,7 @@ import (
 	"golang.org/x/sync/errgroup"
 	"google.golang.org/grpc"
 	"net"
+	http1 "net/http"
 	"os"
 )
 
@@ -38,6 +39,9 @@ func main() {
 
 	g.Go(func() error {
 		return ServeGRPC(ctx, &endpoints, fmt.Sprintf("127.0.0.1:%d", *port), log.With(logger, "transport", "GRPC"))
+	})
+	g.Go(func() error {
+		return ServeHTTP(ctx, &endpoints, fmt.Sprintf("127.0.0.1:%d", *restful), log.With(logger, "transport", "HTTP"))
 	})
 
 	if err := g.Wait(); err != nil {
@@ -71,6 +75,31 @@ func ServeGRPC(ctx context.Context, endpoints *transport.EndpointsSet, addr stri
 	case <-ctx.Done():
 		grpcServer.GracefulStop()
 		return errors.New("grpc server: context canceled")
+	}
+}
+
+func ServeHTTP(ctx context.Context, endpoints *transport.EndpointsSet, addr string, logger log.Logger) error {
+	handler := transport.NewHTTPHandler(endpoints,
+		logger,
+		opentracinggo.NoopTracer{},
+	)
+	httpServer := &http1.Server{
+		Addr:    addr,
+		Handler: handler,
+	}
+	log.With(logger, "level", "info").Log("http listen on", addr)
+	ch := make(chan error)
+	go func() {
+		ch <- httpServer.ListenAndServe()
+	}()
+	select {
+	case err := <-ch:
+		if errors.Is(err, http1.ErrServerClosed) {
+			return nil
+		}
+		return fmt.Errorf("http server: serve: %v", err)
+	case <-ctx.Done():
+		return httpServer.Shutdown(context.Background())
 	}
 }
 

@@ -4,7 +4,6 @@ package pb;
 
 service AddService {
   rpc Add (AddRequest) returns (AddResponse) {}
-  rpc AddAfterMul(AddRequest) returns (AddResponse) {}
 }
 
 message AddRequest {

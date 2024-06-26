@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: core-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: core-deployment
+  template:
+    metadata:
+      labels:
+        app: core-deployment
+    spec:
+      containers:
+        - name: core-service
+          image: jianjustin/core-service:latest
+          ports:
+            - containerPort: 50050 # gRPC Port

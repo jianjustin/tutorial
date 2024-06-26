@@ -4,7 +4,6 @@ package pb;
 
 service SubService {
   rpc Sub (SubRequest) returns (SubResponse) {}
-  rpc SubAfterAdd(SubRequest) returns (SubResponse) {}
 }
 
 message SubRequest {

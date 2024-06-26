@@ -4,7 +4,6 @@ package pb;
 
 service DivService {
   rpc Div (DivRequest) returns (DivResponse) {}
-  rpc DivAfterAdd (DivRequest) returns (DivResponse) {}
 }
 
 message DivRequest {

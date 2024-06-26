@@ -3,16 +3,16 @@ package main
 import (
 	"context"
 	"errors"
+	"flag"
 	"fmt"
+	"github.com/go-kit/kit/sd/etcdv3"
 	"github.com/go-kit/log"
+	"github.com/go-kit/log/level"
 	opentracinggo "github.com/opentracing/opentracing-go"
-	log2 "go.guide/sub-grpc-service/middleware/log"
-	register2 "go.guide/sub-grpc-service/middleware/register"
+	"go.guide/sub-grpc-service/middleware"
 	pb2 "go.guide/sub-grpc-service/pb"
 	"go.guide/sub-grpc-service/service"
 	"go.guide/sub-grpc-service/transport"
-	transportgrpc "go.guide/sub-grpc-service/transport/grpc"
-	transporthttp "go.guide/sub-grpc-service/transport/http"
 	"golang.org/x/sync/errgroup"
 	"google.golang.org/grpc"
 	"net"
@@ -22,26 +22,32 @@ import (
 	"syscall"
 )
 
+var (
+	port    = flag.Int("port", 50052, "The server port")
+	restful = flag.Int("restful", 8082, "the port to restful serve on")
+)
+
 func main() {
-	logger := log.With(log2.InitLogger(os.Stdout))
+	flag.Parse()
+	logger := middleware.InitLogger(os.Stdout)
 	g, ctx := errgroup.WithContext(context.Background())
 	g.Go(func() error {
 		return InterruptHandler(ctx)
 	})
 
 	svc := service.NewSubService()
-	svc = log2.LoggingSubServiceMiddleware(logger)(svc)
-	svc = register2.EtcdRegisterAddServiceMiddleware(register2.GetEtcdRegister(), logger)(svc)
+	svc = service.LoggingSubServiceMiddleware(logger)(svc)
+	svc = EtcdRegisterSubServiceMiddleware(logger)(svc)
 	endpoints := transport.Endpoints(svc)
 
-	log.With(logger, "level", "info").Log("msg", fmt.Sprintf("grpc server start at %s", register2.HostPort))
+	level.Info(logger).Log("msg", fmt.Sprintf("grpc server start at 127.0.0.1:%v", *port))
 
 	g.Go(func() error {
-		return ServeGRPC(ctx, &endpoints, register2.HostPort, log.With(logger, "transport", "GRPC"))
+		return ServeGRPC(ctx, &endpoints, fmt.Sprintf("127.0.0.1:%d", *port), log.With(logger, "transport", "GRPC"))
 	})
 
 	g.Go(func() error {
-		return ServeHTTP(ctx, &endpoints, "localhost:18081", log.With(logger, "transport", "HTTP"))
+		return ServeHTTP(ctx, &endpoints, fmt.Sprintf("127.0.0.1:%d", *restful), log.With(logger, "transport", "HTTP"))
 	})
 
 	if err := g.Wait(); err != nil {
@@ -68,7 +74,7 @@ func ServeGRPC(ctx context.Context, endpoints *transport.EndpointsSet, addr stri
 		return err
 	}
 
-	server := transportgrpc.NewGRPCServer(endpoints,
+	server := transport.NewGRPCServer(endpoints,
 		logger,
 		opentracinggo.NoopTracer{},
 	)
@@ -91,7 +97,7 @@ func ServeGRPC(ctx context.Context, endpoints *transport.EndpointsSet, addr stri
 }
 
 func ServeHTTP(ctx context.Context, endpoints *transport.EndpointsSet, addr string, logger log.Logger) error {
-	handler := transporthttp.NewHTTPHandler(endpoints,
+	handler := transport.NewHTTPHandler(endpoints,
 		logger,
 		opentracinggo.NoopTracer{},
 	)
@@ -106,11 +112,28 @@ func ServeHTTP(ctx context.Context, endpoints *transport.EndpointsSet, addr stri
 	}()
 	select {
 	case err := <-ch:
-		if err == http1.ErrServerClosed {
+		if errors.Is(err, http1.ErrServerClosed) {
 			return nil
 		}
 		return fmt.Errorf("http server: serve: %v", err)
 	case <-ctx.Done():
 		return httpServer.Shutdown(context.Background())
+	}
+}
+
+func EtcdRegisterSubServiceMiddleware(logger log.Logger) service.SubServiceMiddleware {
+	return func(next service.SubService) service.SubService {
+		r := middleware.GetEtcdRegister()
+		if r == nil {
+			level.Error(logger).Log("msg", "get register client failed")
+			return next
+		}
+		err := r.Register(etcdv3.Service{Key: middleware.ServiceKey, Value: fmt.Sprintf("127.0.0.1:%d", *port)})
+		if err != nil {
+			level.Error(logger).Log("msg", "register service failed")
+			return next
+		}
+
+		return next
 	}
 }
