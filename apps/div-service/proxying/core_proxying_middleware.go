@@ -11,6 +11,7 @@ import (
 	grpctransport "github.com/go-kit/kit/transport/grpc"
 	"github.com/go-kit/log"
 	"github.com/sony/gobreaker"
+	"go.guide/div-grpc-service/middleware"
 	"go.guide/div-grpc-service/pb"
 	"go.guide/div-grpc-service/service"
 	"golang.org/x/time/rate"
@@ -35,7 +36,7 @@ func ProxyingMiddleware(ctx context.Context, serviceName string, logger log.Logg
 
 	client, err := etcdv3.NewClient(
 		context.Background(),
-		[]string{"http://127.0.0.1:2379"},
+		[]string{middleware.EtcdHost},
 		etcdv3.ClientOptions{
 			DialTimeout:   3 * time.Second,
 			DialKeepAlive: 3 * time.Second,

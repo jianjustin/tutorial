@@ -8,7 +8,7 @@ import (
 
 const ServiceKey string = "/services/div/"
 const ServiceName string = "div-service"
-const EtcdHost string = "http://127.0.0.1:2379"
+const EtcdHost string = "http://etcd:2379"
 
 func GetEtcdRegister() etcdv3.Client {
 	client, _ := etcdv3.NewClient(

@@ -8,11 +8,12 @@ import (
 
 const ServiceKey string = "/services/sub/"
 const ServiceName string = "sub-service"
+const EtcdHost string = "http://etcd:2379"
 
 func GetEtcdRegister() etcdv3.Client {
 	client, _ := etcdv3.NewClient(
 		context.Background(),
-		[]string{"http://127.0.0.1:2379"},
+		[]string{EtcdHost},
 		etcdv3.ClientOptions{
 			DialTimeout:   3 * time.Second,
 			DialKeepAlive: 3 * time.Second,

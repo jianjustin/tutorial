@@ -41,7 +41,7 @@ func main() {
 	level.Info(logger).Log("msg", fmt.Sprintf("grpc server start at 127.0.0.1:%v", *port))
 
 	g.Go(func() error {
-		return ServeGRPC(ctx, &endpoints, fmt.Sprintf("127.0.0.1:%d", *port), log.With(logger, "transport", "GRPC"))
+		return ServeGRPC(ctx, &endpoints, fmt.Sprintf("0.0.0.0:%d", *port), log.With(logger, "transport", "GRPC"))
 	})
 
 	if err := g.Wait(); err != nil {

@@ -37,17 +37,18 @@ func main() {
 
 	svc := service.NewSubService()
 	svc = service.LoggingSubServiceMiddleware(logger)(svc)
+	svc = service.LoggingSubServiceMiddleware(logger)(svc)
 	svc = EtcdRegisterSubServiceMiddleware(logger)(svc)
 	endpoints := transport.Endpoints(svc)
 
-	level.Info(logger).Log("msg", fmt.Sprintf("grpc server start at 127.0.0.1:%v", *port))
+	level.Info(logger).Log("msg", fmt.Sprintf("grpc server start at 0.0.0.0:%v", *port))
 
 	g.Go(func() error {
-		return ServeGRPC(ctx, &endpoints, fmt.Sprintf("127.0.0.1:%d", *port), log.With(logger, "transport", "GRPC"))
+		return ServeGRPC(ctx, &endpoints, fmt.Sprintf("0.0.0.0:%d", *port), log.With(logger, "transport", "GRPC"))
 	})
 
 	g.Go(func() error {
-		return ServeHTTP(ctx, &endpoints, fmt.Sprintf("127.0.0.1:%d", *restful), log.With(logger, "transport", "HTTP"))
+		return ServeHTTP(ctx, &endpoints, fmt.Sprintf("0.0.0.0:%d", *restful), log.With(logger, "transport", "HTTP"))
 	})
 
 	if err := g.Wait(); err != nil {
