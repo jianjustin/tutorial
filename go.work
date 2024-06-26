@@ -5,6 +5,7 @@ use (
 	apps/div-service
 	apps/core-service
 	apps/sub-service
+	apps/mul-service
 
 	patterns
 	base

@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mul-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: mul-deployment
+  template:
+    metadata:
+      labels:
+        app: mul-deployment
+    spec:
+      containers:
+        - name: mul-service
+          image: jianjustin/mul-service:latest
+          ports:
+            - containerPort: 50053 # gRPC Port
+            - containerPort: 8083 # HTTP Port
