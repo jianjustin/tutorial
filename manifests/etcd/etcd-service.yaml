@@ -1,0 +1,77 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: etcd-config
+  namespace: default
+data:
+  etcd.conf.yml: |
+    name: "etcd"
+    data-dir: "/etcd-data"
+    listen-client-urls: "http://0.0.0.0:2379"
+    advertise-client-urls: "http://etcd:2379"
+    listen-peer-urls: "http://0.0.0.0:2380"
+    initial-advertise-peer-urls: "http://etcd:2380"
+    initial-cluster: "etcd=http://etcd:2380"
+    initial-cluster-token: "etcd-cluster"
+    initial-cluster-state: "new"
+---
+
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: etcd
+  namespace: default
+spec:
+  serviceName: "etcd"
+  replicas: 1
+  selector:
+    matchLabels:
+      app: etcd
+  template:
+    metadata:
+      labels:
+        app: etcd
+    spec:
+      containers:
+        - name: etcd
+          image: quay.io/coreos/etcd:v3.4.13
+          ports:
+            - containerPort: 2379
+              name: client
+            - containerPort: 2380
+              name: peer
+          volumeMounts:
+            - name: etcd-data
+              mountPath: /etcd-data
+            - name: etcd-config
+              mountPath: /etc/etcd
+              subPath: etcd.conf.yml
+      volumes:
+        - name: etcd-config
+          configMap:
+            name: etcd-config
+  volumeClaimTemplates:
+    - metadata:
+        name: etcd-data
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        resources:
+          requests:
+            storage: 1Gi
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: etcd
+  namespace: default
+spec:
+  ports:
+    - port: 2379
+      name: client
+    - port: 2380
+      name: peer
+  clusterIP: None
+  selector:
+    app: etcd

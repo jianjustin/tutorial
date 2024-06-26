@@ -17,3 +17,19 @@ spec:
           image: jianjustin/core-service:latest
           ports:
             - containerPort: 50050 # gRPC Port
+              protocol: TCP
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: core-service
+spec:
+  type: ClusterIP
+  selector:
+    app: core-deployment
+  ports:
+    - name: grpc
+      port: 50050
+      targetPort: 50050
+      protocol: TCP

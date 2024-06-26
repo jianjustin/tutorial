@@ -17,4 +17,25 @@ spec:
           image: jianjustin/mul-service:latest
           ports:
             - containerPort: 50053 # gRPC Port
+              protocol: TCP
             - containerPort: 8083 # HTTP Port
+              protocol: TCP
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: mul-service
+spec:
+  type: ClusterIP
+  selector:
+    app: mul-deployment
+  ports:
+    - name: grpc
+      port: 50053
+      targetPort: 50053
+      protocol: TCP
+    - name: http
+      port: 8083
+      targetPort: 8083
+      protocol: TCP

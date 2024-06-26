@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sub-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: sub-deployment
+  template:
+    metadata:
+      labels:
+        app: sub-deployment
+    spec:
+      containers:
+        - name: sub-service
+          image: jianjustin/sub-service:latest
+          ports:
+            - containerPort: 50052 # gRPC Port
+              protocol: TCP
+            - containerPort: 8082 # HTTP Port
+              protocol: TCP
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: sub-service
+spec:
+  type: ClusterIP
+  selector:
+    app: sub-deployment
+  ports:
+    - name: grpc
+      port: 50052
+      targetPort: 50052
+      protocol: TCP
+    - name: http
+      port: 8082
+      targetPort: 8082
+      protocol: TCP

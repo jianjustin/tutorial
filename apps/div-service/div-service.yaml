@@ -18,3 +18,20 @@ spec:
           ports:
             - containerPort: 50054 # gRPC Port
             - containerPort: 8084 # HTTP Port
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: div-service
+spec:
+  type: ClusterIP
+  selector:
+    app: div-deployment
+  ports:
+    - name: grpc
+      port: 50054
+      targetPort: 50054
+    - name: http
+      port: 8084
+      targetPort: 8084

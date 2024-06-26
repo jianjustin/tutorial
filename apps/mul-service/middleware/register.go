@@ -12,7 +12,7 @@ const ServiceName string = "mul-service"
 func GetEtcdRegister() etcdv3.Client {
 	client, _ := etcdv3.NewClient(
 		context.Background(),
-		[]string{"http://127.0.0.1:2379"},
+		[]string{"http://etcd:2379"},
 		etcdv3.ClientOptions{
 			DialTimeout:   3 * time.Second,
 			DialKeepAlive: 3 * time.Second,

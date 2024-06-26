@@ -18,3 +18,20 @@ spec:
           ports:
             - containerPort: 50051 # gRPC Port
             - containerPort: 8081 # HTTP Port
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: add-service
+spec:
+  type: ClusterIP
+  selector:
+    app: add-deployment
+  ports:
+    - name: grpc
+      port: 50051
+      targetPort: 50051
+    - name: http
+      port: 8081
+      targetPort: 8081
