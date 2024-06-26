@@ -7,6 +7,7 @@ import (
 )
 
 const ServiceKey string = "/services/sub/"
+const ServiceName string = "sub-service"
 
 func GetEtcdRegister() etcdv3.Client {
 	client, _ := etcdv3.NewClient(

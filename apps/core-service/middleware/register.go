@@ -7,6 +7,7 @@ import (
 )
 
 const ServiceKey string = "/services/core/"
+const ServiceName string = "core-service"
 
 func GetEtcdRegister() etcdv3.Client {
 	client, _ := etcdv3.NewClient(

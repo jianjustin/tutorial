@@ -6,8 +6,8 @@ import (
 	"time"
 )
 
-const HostPort string = "localhost:8002"
 const ServiceKey string = "/services/add/"
+const ServiceName string = "add-service"
 
 func GetEtcdRegister() etcdv3.Client {
 	client, _ := etcdv3.NewClient(

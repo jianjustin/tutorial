@@ -128,7 +128,9 @@ func EtcdRegisterSubServiceMiddleware(logger log.Logger) service.SubServiceMiddl
 			level.Error(logger).Log("msg", "get register client failed")
 			return next
 		}
-		err := r.Register(etcdv3.Service{Key: middleware.ServiceKey, Value: fmt.Sprintf("127.0.0.1:%d", *port)})
+		//local := fmt.Sprintf("127.0.0.1:%d", *port)
+		kubernetesVal := fmt.Sprintf("%s:%d", middleware.ServiceName, *port)
+		err := r.Register(etcdv3.Service{Key: middleware.ServiceKey, Value: kubernetesVal})
 		if err != nil {
 			level.Error(logger).Log("msg", "register service failed")
 			return next

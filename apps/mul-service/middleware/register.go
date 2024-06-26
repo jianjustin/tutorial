@@ -7,6 +7,7 @@ import (
 )
 
 const ServiceKey string = "/services/mul/"
+const ServiceName string = "mul-service"
 
 func GetEtcdRegister() etcdv3.Client {
 	client, _ := etcdv3.NewClient(
