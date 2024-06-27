@@ -17,4 +17,5 @@ use (
     demos/opentelemetry/dice
     demos/grpc
     demos/bookstore
+    demos/web-framework
 )
