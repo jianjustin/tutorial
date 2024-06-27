@@ -16,4 +16,5 @@ use (
     demos/nats
     demos/opentelemetry/dice
     demos/grpc
+    demos/bookstore
 )
