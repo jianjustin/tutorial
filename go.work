@@ -18,4 +18,5 @@ use (
     demos/grpc
     demos/bookstore
     demos/web-framework
+    demos/wire
 )
