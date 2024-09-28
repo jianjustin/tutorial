@@ -22,3 +22,4 @@ vcs.xml
 *.wal
 *.tmp
 *.Sum
+.DS_Store
