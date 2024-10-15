@@ -1,0 +1,11 @@
+global:
+  hosts:
+    domain: 192.168.49.2.nip.io  # 使用主机 IP
+gitlab:
+  webservice:
+    service:
+      type: LoadBalancer
+      loadBalancerSourceRanges:
+        - 0.0.0.0/0  # 允许所有 IP 访问
+certmanager-issuer:
+  email: jerry.jian.chen@outlook.com

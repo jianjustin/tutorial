@@ -1,0 +1,25 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: hello-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+    - http:
+        paths:
+          - path: /web2
+            pathType: Prefix
+            backend:
+              service:
+                name: service-web2-clusterip
+                port:
+                  number: 4000
+          - path: /web1
+            pathType: Prefix
+            backend:
+              service:
+                name: service-web1-clusterip
+                port:
+                  number: 3000
