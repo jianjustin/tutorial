@@ -18,5 +18,6 @@ FROM scratch
 
 COPY --from=builder /etc/ssl/certs /etc/ssl/certs
 COPY --from=builder /go/src/weather/weather /weather
+EXPOSE 50001
 ENTRYPOINT ["/weather"]
 CMD []

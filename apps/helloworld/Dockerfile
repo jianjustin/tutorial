@@ -18,5 +18,6 @@ FROM scratch
 
 COPY --from=builder /etc/ssl/certs /etc/ssl/certs
 COPY --from=builder /go/src/helloworld/helloworld /helloworld
+EXPOSE 50000
 ENTRYPOINT ["/helloworld"]
 CMD []

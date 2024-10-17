@@ -18,5 +18,6 @@ FROM scratch
 
 COPY --from=builder /etc/ssl/certs /etc/ssl/certs
 COPY --from=builder /go/src/secret/secret /secret
+EXPOSE 50002
 ENTRYPOINT ["/secret"]
 CMD []

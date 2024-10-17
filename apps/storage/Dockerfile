@@ -18,5 +18,6 @@ FROM scratch
 
 COPY --from=builder /etc/ssl/certs /etc/ssl/certs
 COPY --from=builder /go/src/storage/storage /storage
+EXPOSE 50000
 ENTRYPOINT ["/storage"]
 CMD []
