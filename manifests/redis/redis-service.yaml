@@ -8,7 +8,7 @@ spec:
   resources:
     requests:
       storage: 5Gi  # 请求的存储大小
-  storageClassName: local-path  # 指定使用 local-path StorageClass
+  #storageClassName: local-path  # 指定使用 local-path StorageClass
 ---
 
 apiVersion: apps/v1
@@ -43,7 +43,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: redis-service
+  name: redis
 spec:
   selector:
     app: redis
