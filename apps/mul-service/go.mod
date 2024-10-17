@@ -1,6 +1,6 @@
 module go.guide/mul-grpc-service
 
-go 1.21
+go 1.18
 
 require (
 	github.com/go-kit/kit v0.13.0

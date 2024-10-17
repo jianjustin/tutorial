@@ -1,6 +1,6 @@
 module go.guide/raftexample
 
-go 1.21.5
+go 1.18
 
 require (
 	go.etcd.io/etcd/client/pkg/v3 v3.5.11

@@ -1,22 +1,28 @@
-go 1.21.5
+go 1.21
+
+toolchain go1.21.5
 
 use (
 	apps/add-service
-	apps/div-service
 	apps/core-service
-	apps/sub-service
+	apps/div-service
+	apps/helloworld
+	apps/storage
+	apps/secret
+	apps/weather
 	apps/mul-service
-
-	patterns
+	apps/sub-service
 	base
 	demos/asynq
+	demos/bookstore
+	demos/grpc
+	demos/kit
+	demos/nats
+	demos/opentelemetry/dice
 	demos/raftexample
 	demos/statemachine
-	demos/kit
-    demos/nats
-    demos/opentelemetry/dice
-    demos/grpc
-    demos/bookstore
-    demos/web-framework
-    demos/wire
+	demos/web-framework
+	demos/wire
+
+	patterns
 )
