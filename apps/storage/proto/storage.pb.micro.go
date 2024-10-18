@@ -6,6 +6,7 @@ package storage
 import (
 	fmt "fmt"
 	proto "google.golang.org/protobuf/proto"
+	_ "google.golang.org/protobuf/types/known/structpb"
 	math "math"
 )
 
@@ -40,6 +41,7 @@ type StorageService interface {
 	ClientStream(ctx context.Context, opts ...client.CallOption) (Storage_ClientStreamService, error)
 	ServerStream(ctx context.Context, in *ServerStreamRequest, opts ...client.CallOption) (Storage_ServerStreamService, error)
 	BidiStream(ctx context.Context, opts ...client.CallOption) (Storage_BidiStreamService, error)
+	Connect(ctx context.Context, in *ConnectRequest, opts ...client.CallOption) (*ConnectResponse, error)
 }
 
 type storageService struct {
@@ -220,6 +222,16 @@ func (x *storageServiceBidiStream) Recv() (*BidiStreamResponse, error) {
 	return m, nil
 }
 
+func (c *storageService) Connect(ctx context.Context, in *ConnectRequest, opts ...client.CallOption) (*ConnectResponse, error) {
+	req := c.c.NewRequest(c.name, "Storage.Connect", in)
+	out := new(ConnectResponse)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // Server API for Storage service
 
 type StorageHandler interface {
@@ -227,6 +239,7 @@ type StorageHandler interface {
 	ClientStream(context.Context, Storage_ClientStreamStream) error
 	ServerStream(context.Context, *ServerStreamRequest, Storage_ServerStreamStream) error
 	BidiStream(context.Context, Storage_BidiStreamStream) error
+	Connect(context.Context, *ConnectRequest, *ConnectResponse) error
 }
 
 func RegisterStorageHandler(s server.Server, hdlr StorageHandler, opts ...server.HandlerOption) error {
@@ -235,6 +248,7 @@ func RegisterStorageHandler(s server.Server, hdlr StorageHandler, opts ...server
 		ClientStream(ctx context.Context, stream server.Stream) error
 		ServerStream(ctx context.Context, stream server.Stream) error
 		BidiStream(ctx context.Context, stream server.Stream) error
+		Connect(ctx context.Context, in *ConnectRequest, out *ConnectResponse) error
 	}
 	type Storage struct {
 		storage
@@ -374,4 +388,8 @@ func (x *storageBidiStreamStream) Recv() (*BidiStreamRequest, error) {
 		return nil, err
 	}
 	return m, nil
+}
+
+func (h *storageHandler) Connect(ctx context.Context, in *ConnectRequest, out *ConnectResponse) error {
+	return h.StorageHandler.Connect(ctx, in, out)
 }

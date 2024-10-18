@@ -8,7 +8,7 @@ init:
 
 .PHONY: proto
 proto:
-	@protoc --proto_path=. --micro_out=. --go_out=:. proto/storage.proto
+	@protoc --proto_path=. --proto_path=/root/workspace/protobuf/src --micro_out=. --go_out=:. proto/storage.proto
 
 .PHONY: update
 update:

@@ -3,12 +3,14 @@ syntax = "proto3";
 package storage;
 
 option go_package = "./proto;storage";
+import "google/protobuf/struct.proto";
 
 service Storage {
 	rpc Call(CallRequest) returns (CallResponse) {}
 	rpc ClientStream(stream ClientStreamRequest) returns (ClientStreamResponse) {}
 	rpc ServerStream(ServerStreamRequest) returns (stream ServerStreamResponse) {}
 	rpc BidiStream(stream BidiStreamRequest) returns (stream BidiStreamResponse) {}
+	rpc Connect(ConnectRequest) returns (ConnectResponse) {}
 }
 
 message CallRequest {
@@ -41,4 +43,12 @@ message BidiStreamRequest {
 
 message BidiStreamResponse {
 	int64 stroke = 1;
+}
+
+message ConnectRequest{
+
+}
+
+message ConnectResponse {
+	repeated google.protobuf.Struct datas = 1;
 }

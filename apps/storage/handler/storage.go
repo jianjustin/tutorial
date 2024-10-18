@@ -63,3 +63,36 @@ func (e *Storage) BidiStream(ctx context.Context, stream pb.Storage_BidiStreamSt
 		}
 	}
 }
+
+func (e *Storage) Connect(ctx context.Context, req *pb.ConnectRequest, rsp *pb.ConnectResponse) error {
+	db := NewPostgresRInstance()
+	var tables []string
+	db.Raw("SELECT tablename FROM pg_tables WHERE schemaname = 'public'").Scan(&tables)
+
+	for _, table := range tables {
+		fmt.Println(table)
+	}
+}
+
+func NewPostgresRInstance(host string) *gorm.DB {
+	dsn := fmt.Sprintf("host=postgres user=jian password=123456 dbname=testdb port=5432 sslmode=disable TimeZone=Asia/Shanghai")
+
+	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{
+		// Logger: logger.Default.LogMode(logger.Info),
+	})
+
+	if err != nil {
+		log.Errorf("NewPostgresRInstance err %s", err.Error())
+		panic(err)
+	}
+	sqlDB, err := db.DB()
+	if err != nil {
+		panic(err)
+	}
+
+	//sqlDB.SetMaxIdleConns(viper.GetInt("POSTGRES_MAX_IDLE"))
+	//sqlDB.SetMaxOpenConns(viper.GetInt("POSTGRES_OPEN_IDLE"))
+	sqlDB.SetConnMaxLifetime(time.Hour)
+
+	return db
+}
