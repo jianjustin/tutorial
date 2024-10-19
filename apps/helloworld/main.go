@@ -1,7 +1,6 @@
 package main
 
 import (
-
 	"helloworld/handler"
 	pb "helloworld/proto"
 
@@ -22,6 +21,7 @@ func main() {
 	srv := micro.NewService(
 		micro.Server(grpcs.NewServer()),
 		micro.Client(grpcc.NewClient()),
+		micro.Address(":50000"),
 	)
 	srv.Init(
 		micro.Name(service),

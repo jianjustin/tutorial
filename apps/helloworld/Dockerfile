@@ -1,23 +1,32 @@
+# Build stage
 FROM golang:alpine AS builder
 
-# Set Go env
-ENV CGO_ENABLED=0 GOOS=linux
-WORKDIR /go/src/helloworld
+# Install necessary packages
+RUN apk add --no-cache git
 
-# Install dependencies
-RUN apk --update --no-cache add ca-certificates gcc libtool make musl-dev protoc git
+# Set the working directory
+WORKDIR /go/src/app
 
-# Build Go binary
-COPY Makefile go.mod go.sum ./
-RUN make init && go mod download 
+# Copy go.mod and go.sum files
+COPY go.mod go.sum ./
+
+# Download dependencies
+RUN go mod download
+
+# Copy the source code
 COPY . .
-RUN make proto tidy build
 
-# Deployment container
+# Build the application
+RUN CGO_ENABLED=0 GOOS=linux go build -o /main
+
+# Final stage
 FROM scratch
 
-COPY --from=builder /etc/ssl/certs /etc/ssl/certs
-COPY --from=builder /go/src/helloworld/helloworld /helloworld
+# Copy the binary from the builder stage
+COPY --from=builder /main /main
+
+# Expose the application port
 EXPOSE 50000
-ENTRYPOINT ["/helloworld"]
-CMD []
+
+# Command to run the application
+CMD ["/main"]

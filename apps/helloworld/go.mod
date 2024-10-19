@@ -1,6 +1,6 @@
 module helloworld
 
-go 1.18
+go 1.22
 
 require (
 	github.com/go-micro/plugins/v4/client/grpc v1.2.1

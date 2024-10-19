@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: helloworld-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: helloworld-deployment
+  template:
+    metadata:
+      labels:
+        app: helloworld-deployment
+    spec:
+      containers:
+        - name: helloworld-service
+          image: jianjustin/helloworld:latest
+          ports:
+            - containerPort: 50000 # gRPC Port
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: helloworld-service
+spec:
+  type: ClusterIP
+  selector:
+    app: helloworld-deployment
+  ports:
+    - name: grpc
+      port: 50000
+      targetPort: 50000

@@ -2,7 +2,12 @@ package handler
 
 import (
 	"context"
+	"fmt"
+	"google.golang.org/protobuf/types/known/structpb"
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
 	"io"
+	"os"
 	"time"
 
 	"go-micro.dev/v4/logger"
@@ -67,22 +72,46 @@ func (e *Storage) BidiStream(ctx context.Context, stream pb.Storage_BidiStreamSt
 func (e *Storage) Connect(ctx context.Context, req *pb.ConnectRequest, rsp *pb.ConnectResponse) error {
 	db := NewPostgresRInstance()
 	var tables []string
-	db.Raw("SELECT tablename FROM pg_tables WHERE schemaname = 'public'").Scan(&tables)
+	err := db.Raw("SELECT tablename FROM pg_tables WHERE schemaname = 'public'").Scan(&tables).Error
+	if err != nil {
+		return err
+	}
 
+	type Table struct {
+		Name string `json:"name"`
+	}
+
+	list := []*structpb.Struct{}
 	for _, table := range tables {
 		fmt.Println(table)
+		tableStruct, err := structpb.NewStruct(map[string]interface{}{
+			"name": table,
+		})
+		if err != nil {
+			return err
+		}
+		list = append(list, tableStruct)
 	}
+	rsp.Datas = list
+	return nil
 }
 
-func NewPostgresRInstance(host string) *gorm.DB {
-	dsn := fmt.Sprintf("host=postgres user=jian password=123456 dbname=testdb port=5432 sslmode=disable TimeZone=Asia/Shanghai")
+func NewPostgresRInstance() *gorm.DB {
+	host := os.Getenv("DB_HOST")
+	user := os.Getenv("DB_USER")
+	password := os.Getenv("DB_PASSWORD")
+	dbname := os.Getenv("DB_NAME")
+	port := os.Getenv("DB_PORT")
+	sslmode := os.Getenv("DB_SSLMODE")
+	timezone := os.Getenv("DB_TIMEZONE")
 
-	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{
-		// Logger: logger.Default.LogMode(logger.Info),
-	})
+	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=%s TimeZone=%s",
+		host, user, password, dbname, port, sslmode, timezone)
+
+	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 
 	if err != nil {
-		log.Errorf("NewPostgresRInstance err %s", err.Error())
+		fmt.Errorf("NewPostgresRInstance err %s", err.Error())
 		panic(err)
 	}
 	sqlDB, err := db.DB()
@@ -90,8 +119,6 @@ func NewPostgresRInstance(host string) *gorm.DB {
 		panic(err)
 	}
 
-	//sqlDB.SetMaxIdleConns(viper.GetInt("POSTGRES_MAX_IDLE"))
-	//sqlDB.SetMaxOpenConns(viper.GetInt("POSTGRES_OPEN_IDLE"))
 	sqlDB.SetConnMaxLifetime(time.Hour)
 
 	return db
