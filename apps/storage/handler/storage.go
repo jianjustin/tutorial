@@ -3,6 +3,7 @@ package handler
 import (
 	"context"
 	"fmt"
+	"github.com/redis/go-redis/v9"
 	"google.golang.org/protobuf/types/known/structpb"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -70,7 +71,7 @@ func (e *Storage) BidiStream(ctx context.Context, stream pb.Storage_BidiStreamSt
 }
 
 func (e *Storage) Connect(ctx context.Context, req *pb.ConnectRequest, rsp *pb.ConnectResponse) error {
-	db := NewPostgresRInstance()
+	db := NewPostgresInstance()
 	var tables []string
 	err := db.Raw("SELECT tablename FROM pg_tables WHERE schemaname = 'public'").Scan(&tables).Error
 	if err != nil {
@@ -96,7 +97,7 @@ func (e *Storage) Connect(ctx context.Context, req *pb.ConnectRequest, rsp *pb.C
 	return nil
 }
 
-func NewPostgresRInstance() *gorm.DB {
+func NewPostgresInstance() *gorm.DB {
 	host := os.Getenv("DB_HOST")
 	user := os.Getenv("DB_USER")
 	password := os.Getenv("DB_PASSWORD")
@@ -122,4 +123,31 @@ func NewPostgresRInstance() *gorm.DB {
 	sqlDB.SetConnMaxLifetime(time.Hour)
 
 	return db
+}
+
+func (e *Storage) ConnectCache(ctx context.Context, req *pb.ConnectCacheRequest, rsp *pb.ConnectCacheResponse) error {
+	rdb := redis.NewClient(&redis.Options{
+		Addr:     "redis:6379",
+		Password: "",
+		DB:       0,
+	})
+
+	list, err := rdb.Keys(ctx, "*").Result()
+	if err != nil {
+		return err
+	}
+
+	keys := []*structpb.Struct{}
+
+	for _, key := range list {
+		keyStruct, err := structpb.NewStruct(map[string]interface{}{
+			"key": key,
+		})
+		if err != nil {
+			return err
+		}
+		keys = append(keys, keyStruct)
+	}
+	rsp.Datas = keys
+	return nil
 }

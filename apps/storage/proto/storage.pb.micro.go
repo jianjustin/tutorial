@@ -42,6 +42,7 @@ type StorageService interface {
 	ServerStream(ctx context.Context, in *ServerStreamRequest, opts ...client.CallOption) (Storage_ServerStreamService, error)
 	BidiStream(ctx context.Context, opts ...client.CallOption) (Storage_BidiStreamService, error)
 	Connect(ctx context.Context, in *ConnectRequest, opts ...client.CallOption) (*ConnectResponse, error)
+	ConnectCache(ctx context.Context, in *ConnectCacheRequest, opts ...client.CallOption) (*ConnectCacheResponse, error)
 }
 
 type storageService struct {
@@ -232,6 +233,16 @@ func (c *storageService) Connect(ctx context.Context, in *ConnectRequest, opts .
 	return out, nil
 }
 
+func (c *storageService) ConnectCache(ctx context.Context, in *ConnectCacheRequest, opts ...client.CallOption) (*ConnectCacheResponse, error) {
+	req := c.c.NewRequest(c.name, "Storage.ConnectCache", in)
+	out := new(ConnectCacheResponse)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // Server API for Storage service
 
 type StorageHandler interface {
@@ -240,6 +251,7 @@ type StorageHandler interface {
 	ServerStream(context.Context, *ServerStreamRequest, Storage_ServerStreamStream) error
 	BidiStream(context.Context, Storage_BidiStreamStream) error
 	Connect(context.Context, *ConnectRequest, *ConnectResponse) error
+	ConnectCache(context.Context, *ConnectCacheRequest, *ConnectCacheResponse) error
 }
 
 func RegisterStorageHandler(s server.Server, hdlr StorageHandler, opts ...server.HandlerOption) error {
@@ -249,6 +261,7 @@ func RegisterStorageHandler(s server.Server, hdlr StorageHandler, opts ...server
 		ServerStream(ctx context.Context, stream server.Stream) error
 		BidiStream(ctx context.Context, stream server.Stream) error
 		Connect(ctx context.Context, in *ConnectRequest, out *ConnectResponse) error
+		ConnectCache(ctx context.Context, in *ConnectCacheRequest, out *ConnectCacheResponse) error
 	}
 	type Storage struct {
 		storage
@@ -392,4 +405,8 @@ func (x *storageBidiStreamStream) Recv() (*BidiStreamRequest, error) {
 
 func (h *storageHandler) Connect(ctx context.Context, in *ConnectRequest, out *ConnectResponse) error {
 	return h.StorageHandler.Connect(ctx, in, out)
+}
+
+func (h *storageHandler) ConnectCache(ctx context.Context, in *ConnectCacheRequest, out *ConnectCacheResponse) error {
+	return h.StorageHandler.ConnectCache(ctx, in, out)
 }
