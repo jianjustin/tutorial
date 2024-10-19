@@ -2,6 +2,7 @@ package main
 
 import (
 	"storage/handler"
+	"storage/middleware"
 	pb "storage/proto"
 
 	"go-micro.dev/v4"
@@ -28,8 +29,10 @@ func main() {
 		micro.Version(version),
 	)
 
+	db := middleware.NewPostgresInstance()
+
 	// Register handler
-	if err := pb.RegisterStorageHandler(srv.Server(), new(handler.Storage)); err != nil {
+	if err := pb.RegisterStorageHandler(srv.Server(), handler.NewStorageHandler(db)); err != nil {
 		logger.Fatal(err)
 	}
 	// Run service

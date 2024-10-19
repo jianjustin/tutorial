@@ -4,11 +4,12 @@ import (
 	"context"
 	"fmt"
 	"github.com/redis/go-redis/v9"
+	"github.com/spf13/cast"
 	"google.golang.org/protobuf/types/known/structpb"
-	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"io"
-	"os"
+	"storage/middleware"
+	"storage/model"
 	"time"
 
 	"go-micro.dev/v4/logger"
@@ -16,7 +17,13 @@ import (
 	pb "storage/proto"
 )
 
-type Storage struct{}
+type Storage struct {
+	DB *gorm.DB
+}
+
+func NewStorageHandler(db *gorm.DB) *Storage {
+	return &Storage{DB: db}
+}
 
 func (e *Storage) Call(ctx context.Context, req *pb.CallRequest, rsp *pb.CallResponse) error {
 	logger.Infof("Received Storage.Call request: %v", req)
@@ -71,7 +78,7 @@ func (e *Storage) BidiStream(ctx context.Context, stream pb.Storage_BidiStreamSt
 }
 
 func (e *Storage) Connect(ctx context.Context, req *pb.ConnectRequest, rsp *pb.ConnectResponse) error {
-	db := NewPostgresInstance()
+	db := middleware.NewPostgresInstance()
 	var tables []string
 	err := db.Raw("SELECT tablename FROM pg_tables WHERE schemaname = 'public'").Scan(&tables).Error
 	if err != nil {
@@ -95,34 +102,6 @@ func (e *Storage) Connect(ctx context.Context, req *pb.ConnectRequest, rsp *pb.C
 	}
 	rsp.Datas = list
 	return nil
-}
-
-func NewPostgresInstance() *gorm.DB {
-	host := os.Getenv("DB_HOST")
-	user := os.Getenv("DB_USER")
-	password := os.Getenv("DB_PASSWORD")
-	dbname := os.Getenv("DB_NAME")
-	port := os.Getenv("DB_PORT")
-	sslmode := os.Getenv("DB_SSLMODE")
-	timezone := os.Getenv("DB_TIMEZONE")
-
-	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=%s TimeZone=%s",
-		host, user, password, dbname, port, sslmode, timezone)
-
-	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
-
-	if err != nil {
-		fmt.Errorf("NewPostgresRInstance err %s", err.Error())
-		panic(err)
-	}
-	sqlDB, err := db.DB()
-	if err != nil {
-		panic(err)
-	}
-
-	sqlDB.SetConnMaxLifetime(time.Hour)
-
-	return db
 }
 
 func (e *Storage) ConnectCache(ctx context.Context, req *pb.ConnectCacheRequest, rsp *pb.ConnectCacheResponse) error {
@@ -149,5 +128,27 @@ func (e *Storage) ConnectCache(ctx context.Context, req *pb.ConnectCacheRequest,
 		keys = append(keys, keyStruct)
 	}
 	rsp.Datas = keys
+	return nil
+}
+
+func (e *Storage) Create(ctx context.Context, req *pb.CreateRequest, rsp *pb.CreateResponse) error {
+	tenantId, err := middleware.GetTenantId(ctx)
+	if err != nil {
+		return err
+	}
+
+	dataMap := req.Record.AsMap()
+	logger.Infof("Received Storage.Create request: %v", req)
+	systemParam := model.SystemParam{
+		Id:    cast.ToString(dataMap["id"]),
+		Key:   cast.ToString(dataMap["key"]),
+		Value: cast.ToString(dataMap["value"]),
+		G:     tenantId,
+	}
+	err = e.DB.Create(&systemParam).Error
+	if err != nil {
+		return err
+	}
+
 	return nil
 }

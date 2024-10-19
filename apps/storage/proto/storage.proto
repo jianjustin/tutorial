@@ -12,6 +12,7 @@ service Storage {
 	rpc BidiStream(stream BidiStreamRequest) returns (stream BidiStreamResponse) {}
 	rpc Connect(ConnectRequest) returns (ConnectResponse) {}
 	rpc ConnectCache(ConnectCacheRequest) returns (ConnectCacheResponse) {}
+	rpc Create(CreateRequest) returns (CreateResponse) {}
 }
 
 message CallRequest {
@@ -60,4 +61,14 @@ message ConnectCacheRequest {
 
 message ConnectCacheResponse {
 	repeated google.protobuf.Struct datas = 1;
+}
+
+message CreateRequest {
+	string table = 1;
+	google.protobuf.Struct record = 2;
+	string id = 3;
+}
+
+message CreateResponse {
+	string id = 1;
 }
