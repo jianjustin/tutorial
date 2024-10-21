@@ -137,12 +137,12 @@ func (e *Storage) Create(ctx context.Context, req *pb.CreateRequest, rsp *pb.Cre
 		return err
 	}
 
-	dataMap := req.Record.AsMap()
+	dataMap := req.Record.GetFields()
 	logger.Infof("Received Storage.Create request: %v", req)
 	systemParam := model.SystemParam{
-		Id:    cast.ToString(dataMap["id"]),
-		Key:   cast.ToString(dataMap["key"]),
-		Value: cast.ToString(dataMap["value"]),
+		Id:    cast.ToString(dataMap["id"].GetStringValue()),
+		Key:   cast.ToString(dataMap["key"].GetStringValue()),
+		Value: cast.ToString(dataMap["value"].GetStringValue()),
 		G:     tenantId,
 	}
 	err = e.DB.Create(&systemParam).Error
