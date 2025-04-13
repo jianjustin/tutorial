@@ -17,14 +17,9 @@ const (
 	ApprovalRejected ApprovalStatus = 2
 	ApprovalJoining  ApprovalStatus = 3
 	ApprovalQuitting ApprovalStatus = 4
-)
 
-const (
-	// 发起事件
-	EventJoinRequest Event = "JoinRequest"
-	EventQuitRequest Event = "QuitRequest"
-
-	// 审批结果事件
+	EventJoinRequest  Event = "JoinRequest"
+	EventQuitRequest  Event = "QuitRequest"
 	EventJoinApproved Event = "JoinApproved"
 	EventJoinRejected Event = "JoinRejected"
 	EventQuitApproved Event = "QuitApproved"
@@ -45,12 +40,6 @@ type Transition struct {
 	ToApprovalStatus ApprovalStatus
 	Before           HookFunc
 	After            HookFunc
-}
-
-type StateKey struct {
-	JoinStatus     JoinStatus
-	ApprovalStatus ApprovalStatus
-	Event          Event
 }
 
 var transitions = map[Event]Transition{
