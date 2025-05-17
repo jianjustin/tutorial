@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"runtime"
 	"strings"
+	"time"
 )
 
 func trace(message string) string {
@@ -33,5 +34,15 @@ func Recovery() HandlerFunc {
 		}()
 
 		c.Next()
+	}
+}
+
+func WebLog() HandlerFunc {
+	return func(c *Context) {
+		t := time.Now()
+		log.Printf("[%d] %s - %s: %s", c.StatusCode, c.Req.RequestURI, c.Req.Method, t.String())
+		c.Next()
+		t = time.Now()
+		log.Printf("[%d] %s in %v", c.StatusCode, c.Req.RequestURI, time.Since(t))
 	}
 }

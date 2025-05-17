@@ -21,13 +21,13 @@ func onlyForV2() kit.HandlerFunc {
 
 func main() {
 	r := kit.New()
-	r.LoadHTMLGlob("templates/*")
 	v1 := r.Group("")
-	v1.Use(kit.Recovery())
+	v1.Use(kit.Recovery(), kit.WebLog())
 	{
 		v1.GET("/", func(c *kit.Context) {
-			c.HTML(http.StatusOK, "css.tmpl", map[string]interface{}{
-				"name": "jianjustin",
+			log.Printf("handle: /")
+			c.JSON(200, map[string]interface{}{
+				"name": "geektutu",
 			})
 		})
 		// index out of range for testing Recovery()
@@ -35,7 +35,6 @@ func main() {
 			names := []string{"geektutu"}
 			c.String(http.StatusOK, names[100])
 		})
-		v1.Static("/assets", "./static")
 	}
 
 	r.Run(":9999")
