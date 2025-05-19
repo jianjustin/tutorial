@@ -1,7 +1,6 @@
 package kit
 
 import (
-	"html/template"
 	"log"
 	"net/http"
 	"strings"
@@ -13,10 +12,8 @@ type HandlerFunc func(c *Context)
 // Engine implement the interface of ServeHTTP
 type Engine struct {
 	*RouterGroup
-	router        *router
-	groups        []*RouterGroup     // store all groups
-	htmlTemplates *template.Template // for html render
-	funcMap       template.FuncMap   // for html render
+	router *router
+	groups []*RouterGroup // store all groups
 }
 
 type RouterGroup struct {
