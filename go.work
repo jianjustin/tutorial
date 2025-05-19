@@ -1,17 +1,15 @@
-go 1.22
-
-toolchain go1.22.8
+go 1.23.1
 
 use (
 	apps/add-service
 	apps/core-service
 	apps/div-service
 	apps/helloworld
-	apps/storage
-	apps/secret
-	apps/weather
 	apps/mul-service
+	apps/secret
+	apps/storage
 	apps/sub-service
+	apps/weather
 	base
 	demos/asynq
 	demos/bookstore
@@ -25,4 +23,5 @@ use (
 	demos/wire
 
 	patterns
+	demos/wal
 )
