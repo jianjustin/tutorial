@@ -3,35 +3,32 @@ package base
 import (
 	"context"
 	"fmt"
+	"math/rand"
+	"sync"
 	"time"
 )
 
-// 验证超时
-func demoTimeout() {
-	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
-	defer cancel()
+// 定义context中使用的key类型
+type contextKey string
 
-	select {
-	case <-time.After(3 * time.Second):
-		fmt.Println("任务完成")
-	case <-ctx.Done():
-		fmt.Println("超时:", ctx.Err())
-	}
-}
+const (
+	requestIDKey contextKey = "requestID"
+	traceIDKey   contextKey = "traceID"
+)
 
-// 验证cancel逻辑
-func demoCancel() {
-	ctx, cancel := context.WithCancel(context.Background())
+// worker函数演示取消信号处理
+func worker(ctx context.Context, wg *sync.WaitGroup, id int) {
+	defer wg.Done()
 
-	go func() {
-		time.Sleep(1 * time.Second)
-		cancel() // 主动取消
-	}()
+	fmt.Printf("worker %d: 开始工作\n", id)
 
-	select {
-	case <-time.After(3 * time.Second):
-		fmt.Println("任务完成")
-	case <-ctx.Done():
-		fmt.Println("被取消:", ctx.Err())
+	for {
+		select {
+		case <-time.After(time.Duration(rand.Intn(500)) * time.Millisecond):
+			fmt.Printf("worker %d: 处理中...\n", id)
+		case <-ctx.Done():
+			fmt.Printf("worker %d: 收到取消信号，原因: %v\n", id, ctx.Err())
+			return
+		}
 	}
 }
