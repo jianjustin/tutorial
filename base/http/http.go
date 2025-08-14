@@ -13,7 +13,6 @@ func (engine *Engine) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	w.Header().Set("Content-Type", "text/plain")
 	w.WriteHeader(http.StatusOK)
 	w.Write([]byte(fmt.Sprintf("%s", "success")))
-
 }
 
 func main() {

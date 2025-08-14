@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"sync"
+	"sync/atomic"
 	"testing"
 	"time"
 )
@@ -66,4 +67,37 @@ func TestForDemoContext(t *testing.T) {
 	}
 
 	wg.Wait()
+}
+
+func TestForDoneChannel(t *testing.T) {
+	val.Store(0)
+	// 启动多个 goroutine
+	for i := 1; i <= 3; i++ {
+		go worker1(i)
+	}
+
+	// 模拟 2 秒钟后设置取消标志
+	time.Sleep(2 * time.Second)
+	cancelFlag = true
+
+	// 等待 goroutine 完成
+	time.Sleep(1 * time.Second)
+}
+
+var cancelFlag bool
+var val atomic.Int32
+
+//var cancelFlag atomic.Bool
+
+func worker1(id int) {
+	for {
+		if cancelFlag {
+			fmt.Printf("Worker %d stopping because cancelFlag is set\n", id)
+			return
+		}
+
+		num := 5
+		time.Sleep(time.Duration(num*10) * time.Millisecond)
+		fmt.Printf("Worker %d working：%d\n", id, val.Add(1))
+	}
 }

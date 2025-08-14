@@ -1,4 +1,4 @@
-go 1.23.1
+go 1.24.4
 
 use (
 	apps/add-service
@@ -13,16 +13,18 @@ use (
 	base
 	demos/asynq
 	demos/bookstore
+	demos/cdc
 	demos/grpc
 	demos/kit
 	demos/nats
 	demos/opentelemetry/dice
 	demos/raftexample
+	demos/sse
 	demos/statemachine
+	demos/wal
 	demos/web-framework
 	demos/wire
-
+	demos/kafka/producer
+	demos/kafka/consumer
 	patterns
-	demos/wal
-	demos/sse
 )
