@@ -41,8 +41,10 @@ func main() {
 				fmt.Printf("Error while reading message: %v\n", err)
 				continue
 			}
-			fmt.Printf("Consumed: topic=%s partition=%d offset=%d key=%s value=%s\n",
-				m.Topic, m.Partition, m.Offset, string(m.Key), string(m.Value))
+			if err = r.CommitMessages(ctx, m); err != nil {
+				fmt.Printf("Failed to commit message: %v\n", err)
+			}
+			fmt.Printf("Consumed: topic=%s partition=%d offset=%d key=%s value=%s\n", m.Topic, m.Partition, m.Offset, string(m.Key), string(m.Value))
 		}
 	}
 }
