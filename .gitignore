@@ -24,5 +24,4 @@ vcs.xml
 *.Sum
 *.sum
 .DS_Store
-settings.json
 *.log
