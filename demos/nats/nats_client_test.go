@@ -1,12 +1,13 @@
-package nats
+package main
 
 import (
-	"github.com/nats-io/nats.go"
 	"log"
 	"os"
 	"os/signal"
 	"testing"
 	"time"
+
+	"github.com/nats-io/nats.go"
 )
 
 func TestCreateSubject(t *testing.T) {

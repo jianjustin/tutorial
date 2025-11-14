@@ -1,0 +1,45 @@
+@startuml ComponentDiagram
+
+skinparam linetype ortho
+skinparam nodesep 120
+skinparam ranksep 80
+skinparam componentPadding 16
+skinparam padding 20
+skinparam ArrowThickness 2
+
+left to right direction
+' 组件图：展示 NATS、主题、生产者、消费者 的静态关系
+package "NATS服务" as NATS {
+  [Subject: demo.subject] as Subject
+}
+
+component "生产者" as Producer
+component "消费者" as Consumer
+
+Producer --> Subject : Publish(msg)
+Subject --> Consumer : Deliver(msg)
+@enduml
+
+@startuml SequenceDiagram
+' 时序图：展示发布->服务端->消费者 的运行时交互（按测试中的步骤）
+participant Producer as "Producer\n(ncPub goroutine)"
+participant NATS as "NATS Server"
+participant Consumer as "Consumer\n(ncSub goroutine)"
+
+Producer -> NATS : Connect(ncPub)
+Consumer -> NATS : Connect(ncSub)
+Consumer -> NATS : SubscribeSync(subjectName)
+NATS --> Consumer : subscription registered
+note right: consumer calls Flush() to ensure registration
+
+loop for each message i=1..msgCount
+    Producer -> NATS : Publish(subjectName, "hello nats i")
+    NATS -> Consumer : Deliver message i
+    Consumer -> Consumer : NextMsg(timeout) (reads message)
+end
+
+Producer -> NATS : Flush() (ensure messages sent)
+Producer -> Producer : LastError() (check)
+note left of Producer : producer sleeps briefly between publishes\n(see time.Sleep in test)
+note right of Consumer : consumer reads msgCount messages then exits
+@enduml
