@@ -25,3 +25,4 @@ vcs.xml
 *.sum
 .DS_Store
 *.log
+/manifests/nats/data/*
